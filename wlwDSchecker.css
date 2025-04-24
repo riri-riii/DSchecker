@@ -14,7 +14,7 @@
 /* 入力フィールド */
 input, select {
   padding: 5px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
   outline: none;
   width: 150px;
