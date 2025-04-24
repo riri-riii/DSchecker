@@ -10,6 +10,7 @@
   display: inline-block;
   position: relative;
 }
+
 /* 入力フィールド */
 input, select {
   padding: 5px;
@@ -18,9 +19,10 @@ input, select {
   outline: none;
   width: 150px;
   text-decoration: none;
+  box-sizing: border-box; /* ボックスサイズを調整 */
 }
 
-/* サジェスト */
+/* サジェストボックスのスタイル */
 .suggestions {
   border: 1px solid #ccc;
   max-height: 150px;
@@ -28,8 +30,19 @@ input, select {
   margin-top: 5px;
   position: absolute;
   background-color: white;
-  z-index: 1000;
+  z-index: 1050; /* 他の要素よりも上に表示 */
   width: 100%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 影を追加して視認性向上 */
+}
+
+.suggestions div {
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.suggestions div:hover {
+  background-color: #f0f0f0; /* ホバー時の背景色変更 */
 }
 
 /* 表をスクロール可能にするラッパー */
@@ -64,14 +77,24 @@ th {
 
 /* 評価セルの色はJSで inline-style によって設定されます */
 
-/* モバイル対応：文字サイズや感覚を調整する場合はこちらに追記できます */
+/* モバイル対応：検索ボックスや表を調整 */
 @media screen and (max-width: 1300px) {
   input, select {
     font-size: 14px;
-    width: 100%;
+    width: 100%; /* 幅を親要素に合わせる */
   }
 
   .box {
-    flex:100%;
+    flex: 100%;
+  }
+
+  #resultTable,
+  #summaryTable {
+    width: 100%; /* 表幅を自動調整 */
+  }
+
+  th, td {
+    font-size: 12px; /* 小さい画面でのフォントサイズ調整 */
+    padding: 3px; /* 余白を調整 */
   }
 }
