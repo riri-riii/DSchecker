@@ -26,8 +26,10 @@ function setupSearchBoxes() {
           sugBox.appendChild(div);
         });
       });
-
-        
+        input.addEventListener("blur", () => {
+        setTimeout(() => {
+        sugBox.innerHTML = "";
+        }, 200);
       });
     });
   }
