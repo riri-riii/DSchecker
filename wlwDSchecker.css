@@ -11,14 +11,16 @@
   position: relative;
 }
 
-/* 入力フィールド */
+/* 入力フィールドのスタイルを明示的にリセット */
 input, select {
   padding: 5px;
-  border: none;
-  outline: none;
+  border: none; /* ボーダーを完全に削除 */
+  border-bottom: 1px solid transparent; /* 必要に応じて透明な下線 */
+  outline: none; /* フォーカス時のアウトラインを削除 */
   width: 150px;
   text-decoration: none;
   box-sizing: border-box; /* ボックスサイズを調整 */
+  background-color: white; /* 背景色を明示的に設定 */
 }
 
 /* サジェストボックスのスタイル */
