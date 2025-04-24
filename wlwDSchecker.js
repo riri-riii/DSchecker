@@ -27,10 +27,7 @@ function setupSearchBoxes() {
         });
       });
 
-      input.addEventListener("blur", () => {
-        setTimeout(() => {
-          sugBox.innerHTML = "";
-        }, 200);
+        
       });
     });
   }
@@ -98,7 +95,7 @@ function setupSearchBoxes() {
     const cast = castData.find(c => c.キャスト === castName);
     if (!cast) return;
 
-    judgeRow.cells[0].innerText = `評価`;
+    judgeRow.cells[0].innerText = `1確残`;
 
     for (let i = 2; i <= 7; i++) {
     const required = parseFloat(cast[i]);
