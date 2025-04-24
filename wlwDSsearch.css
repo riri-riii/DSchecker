@@ -1,0 +1,77 @@
+/* 検索ボックス周り */
+.search-container {
+  display: flex;
+  flex-wrap: wrap; /* モバイル対応 */
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.box {
+  display: inline-block;
+  position: relative;
+}
+
+/* 入力フィールド */
+input, select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  width: 150px;
+}
+
+/* サジェスト */
+.suggestions {
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 5px;
+  position: absolute;
+  background-color: white;
+  z-index: 1000;
+  width: 100%;
+}
+
+/* 表をスクロール可能にするラッパー */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* 表の基本スタイル */
+#resultTable,
+#summaryTable {
+  width: 1200px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
+  height: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+/* 評価セルの色はJSで inline-style によって設定されます */
+
+/* モバイル対応：文字サイズや感覚を調整する場合はこちらに追記できます */
+@media screen and (max-width: 1300px) {
+  input, select {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .box {
+    flex:100%;
+  }
+}
