@@ -1,8 +1,9 @@
+
 /* 検索ボックス周り */
 .search-container {
   display: flex;
   flex-wrap: wrap; /* モバイル対応 */
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 30px;
 }
 
@@ -14,12 +15,10 @@
 /* 入力フィールドのスタイルを明示的にリセット */
 input, select {
   padding-bottom:1px;
-  padding: 5px;
+  padding: 7px;
   border: 1px solid #c0c0c0;
-  border-bottom: 20px;
-  outline: 2px;
-  width: 150px;
-  text-decoration: none;
+  outline: 1px;
+  width: 195px;
   box-sizing: border-box;
   background-color: white; /* 背景色を明示的に設定 */
 }
@@ -33,7 +32,7 @@ input, select {
   position: absolute;
   background-color: white;
   z-index: -100;
-  width: 50%;
+  width: 100%;
 }
 
 /* 枠線を目立たせるスタイル */
@@ -41,7 +40,6 @@ input, select {
     z-index: 100;
     border: 1px solid #c0c0c0;
     border-radius: 4px; /* 角を丸める */
-    transition: border 0.2s ease; /* 枠線のアニメーション */
 }
 
 .suggestions div {
