@@ -26,7 +26,7 @@ input, select {
 
 /* サジェストボックスのスタイル */
 .suggestions {
-  border: none !important; /* 枠線を確実に消す */
+  border: 1px solid transparent;
   max-height: 150px;
   overflow-y: auto;
   margin-top: 5px;
