@@ -9,12 +9,12 @@ function setupSearchBoxes() {
             
             // キーワードが空の場合は枠線を削除して終了
             if (!keyword) {
-                input.classList.remove("active-border");
+                sugBox.classList.remove("active-border");
                 return;
             }
 
             // キーワードがある場合は枠線を追加
-            input.classList.add("active-border");
+            sugBox.classList.add("active-border");
 
             const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
             const matches = list.filter(item =>
