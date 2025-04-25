@@ -1,51 +1,50 @@
-
 function setupSearchBoxes() {
   config.forEach(cfg => {
-      const input = document.getElementById(cfg.search);
-      const sugBox = document.getElementById(cfg.sug);
+    const input = document.getElementById(cfg.search);
+    const sugBox = document.getElementById(cfg.sug);
 
-      input.addEventListener("input", () => {
-          const keyword = input.value.toLowerCase();
+    input.addEventListener("input", () => {
+      const keyword = input.value.toLowerCase();
+      sugBox.innerHTML = "";
+
+      if (!keyword) {
+        sugBox.classList.remove("active-border");
+        return;
+      }
+
+      sugBox.classList.add("active-border");
+      const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
+      const matches = list.filter(item =>
+        item.読み.toLowerCase().includes(keyword) ||
+        item.アシスト名.toLowerCase().includes(keyword)
+      );
+
+      matches.forEach(item => {
+        const div = document.createElement("div");
+        div.textContent = item.アシスト名;
+        div.clｓｓassName = "suggestion-item";
+        div.onclick = () => {
+          input.value = item.アシスト名;
           sugBox.innerHTML = "";
-
-          if (!keyword) {
-              sugBox.classList.remove("active-border"); 
-              return;
-          }
-
-          sugBox.classList.add("active-border");
-          const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
-          const matches = list.filter(item =>
-              item.読み.toLowerCase().includes(keyword) ||
-              item.アシスト名.toLowerCase().includes(keyword)
-          );
-
-          matches.forEach(item => {
-              const div = document.createElement("div");
-              div.textContent = item.アシスト名;
-              div.className = "suggestion-item";
-              div.onclick = () => {
-                  input.value = item.アシスト名;
-                  sugBox.innerHTML = "";
-                  sugBox.classList.remove("active-border"); 
-                  addToTable(item);
-              };
-              sugBox.appendChild(div);
-          });
+          sugBox.classList.remove("active-border");
+          addToTable(item);
+        };
+        sugBox.appendChild(div);
       });
+    });
 
-      input.addEventListener("blur", () => {
-          setTimeout(() => {
-              sugBox.innerHTML = "";
-              sugBox.classList.remove("active-border"); 
-          }, 200);
-      });
+    input.addEventListener("blur", () => {
+      setTimeout(() => {
+        sugBox.innerHTML = "";
+        sugBox.classList.remove("active-border");
+      }, 200);
+    });
 
-      input.addEventListener("focus", () => {
-          if (sugBox.children.length > 0) {
-              sugBox.classList.add("active-border");
-          }
-      });
+    input.addEventListener("focus", () => {
+      if (sugBox.children.length > 0) {
+        sugBox.classList.add("active-border");
+      }
+    });
   });
 }
 
@@ -58,10 +57,10 @@ function addToTable(item) {
 
   rows[0].cells[index + 1].innerText = item.アシスト名;
   rows[1].cells[index + 1].innerText = item.レベル;
-  rows[2].cells[index + 1].innerText = item.DS値;
+  rows[2].cells[index + 1].innerText = parseFloat(item.DS値).toFixed(2); // 小数点以下3桁で丸める
   rows[3].cells[index + 1].innerText = item.カテゴリ;
-
   updateSummaryTable();
+  sugBox.classList.remove("active-border");
 }
 
 function updateSummaryTable() {
@@ -72,6 +71,7 @@ function updateSummaryTable() {
   const levels = [];
   const dsValues = [];
 
+  // 各列のデータを取得
   for (let i = 1; i < levelRow.length; i++) {
     const level = parseInt(levelRow[i].innerText);
     const ds = parseFloat(dsRow[i].innerText);
@@ -81,6 +81,7 @@ function updateSummaryTable() {
     }
   }
 
+  // サマリーテーブルを更新
   const summaryCells = document.querySelector("#summaryTable tbody tr").cells;
   for (let i = 1; i <= 8; i++) {
     summaryCells[i].innerText = "0";
@@ -93,7 +94,7 @@ function updateSummaryTable() {
         total += dsValues[j];
       }
     }
-    summaryCells[i].innerText = total;
+    summaryCells[i].innerText = total.toFixed(2); // 小数点以下3桁で丸める
   }
 
   const judgeRow = document.getElementById("judgeRow");
@@ -101,17 +102,14 @@ function updateSummaryTable() {
 
   if (!castName) {
     for (let i = 1; i <= 8; i++) {
-        judgeRow.cells[i].innerText = "";
-        judgeRow.cells[i].style.color = "";
+      judgeRow.cells[i].innerText = "";
+      judgeRow.cells[i].style.color = "";
     }
-    judgeRow.cells[0].innerText = "評価";
     return;
   }
 
   const cast = castData.find(c => c.キャスト === castName);
   if (!cast) return;
-
-  judgeRow.cells[0].innerText = `1確残`;
 
   for (let i = 2; i <= 7; i++) {
     const required = parseFloat(cast[i]);
@@ -120,10 +118,10 @@ function updateSummaryTable() {
     const cell = judgeRow.cells[i];
 
     if (actual >= required) {
-      cell.innerText = `+${Math.round(diff)}`;
+      cell.innerText = `+${diff.toFixed(2)}`;
       cell.style.color = "green";
     } else {
-      cell.innerText = `${Math.round(diff)}`;
+      cell.innerText = `${diff.toFixed(2)}`;
       cell.style.color = "red";
     }
   }
@@ -167,3 +165,25 @@ Promise.all([
   setupSearchBoxes();
   populateCastSelect();
 }).catch(err => console.error("データ読み込みエラー:", err));
+
+
+document.getElementById("clearButton").addEventListener("click", () => {
+  // 各検索ボックスの内容をクリア
+  for (let i = 1; i <= 5; i++) {
+    const input = document.getElementById(`search${i}`);
+    const sugBox = document.getElementById(`sug${i}`);
+    const table = document.getElementById("resultTable");
+    if (input) input.value = ""; // 入力内容をクリア
+    if (sugBox) sugBox.innerHTML = ""; // サジェストボックスをクリア
+    // テーブルの1列目以外をクリア
+    const rows = table.querySelectorAll("tbody tr");
+    rows.forEach(row => {
+      for (let j = 1; j < row.cells.length; j++) {
+        row.cells[j].innerText = "";
+      }
+    });
+  }
+
+  // サマリーテーブルを更新
+  updateSummaryTable();
+});

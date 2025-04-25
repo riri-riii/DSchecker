@@ -1,10 +1,9 @@
-
 /* 検索ボックス周り */
 .search-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .box {
@@ -12,31 +11,58 @@
   position: relative;
 }
 
-input, select {
+input {
   padding-bottom:1px;
-  padding: 7px;
+  padding: 10px;
   border: 1px solid #c0c0c0;
   outline: 1px;
-  width: 195px;
+  width: 190px;
+  height: 37px;
   box-sizing: border-box;
   background-color: white;
 }
 
+select {
+  padding-bottom:1px;
+  padding: 10px;
+  border: 1px solid #c0c0c0;
+  outline: 1px;
+  width: 120px;
+  height: 37px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+button {
+  padding-bottom:1px;
+  border: 1px solid #c0c0c0;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  height: 37px;
+  width: 68px;
+}
+button:hover {
+  background-color: #e0e0e0;
+}
+
 .suggestions {
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
   max-height: 150px;
   overflow-y: auto;
   margin-top: 5px;
   position: absolute;
   background-color: white;
-  z-index: 1;
-  width: 100%;
+  z-index: -1;
+  width: 100%; /* 検索ボックスと同じ幅にする */
 }
 
 .active-border {
-    z-index: 100;
-    border: 1px solid #c0c0c0;
-    border-radius: 4px;
+  border: 1px solid #c0c0c0; /* サジェストボックスの枠線を表示 */
+  z-index: 1000; /* サジェストボックスのz-indexを上げる */
+}
+
+.box {
+  position: relative; /* suggestionsを検索ボックスの下に配置するために必要 */
 }
 
 .suggestions div {
