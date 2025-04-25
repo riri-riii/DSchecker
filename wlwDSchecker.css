@@ -3,7 +3,7 @@
   display: flex;
   flex-wrap: wrap; /* モバイル対応 */
   gap: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .box {
