@@ -1,1 +1,99 @@
-/* CSS内容（修正済み） */
+
+/* 検索ボックス周り */
+.search-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.box {
+  display: inline-block;
+  position: relative;
+}
+
+input, select {
+  padding-bottom:1px;
+  padding: 7px;
+  border: 1px solid #c0c0c0;
+  outline: 1px;
+  width: 195px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+.suggestions {
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 5px;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+  width: 100%;
+}
+
+.active-border {
+    z-index: 100;
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+}
+
+.suggestions div {
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.suggestions div:hover {
+  background-color: #f0f0f0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  margin-top: 20px;
+}
+
+#resultTable,
+#summaryTable {
+  width: 1200px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
+  height: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+@media screen and (max-width: 1300px) {
+  input, select {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .box {
+    flex: 100%;
+  }
+
+  #resultTable,
+  #summaryTable {
+    width: 100%;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 3px;
+  }
+}
