@@ -15,7 +15,7 @@
 input, select {
   padding-bottom:1px;
   padding: 5px;
-  border: 1px;
+  border: 1px solid #c0c0c0;
   border-bottom: 20px;
   outline: 1px;
   width: 150px;
