@@ -10,30 +10,29 @@
 </head>
 <body>
 <h2>wlw DS値計算機</h2>
-  <h3>キャスト・アシスト選択</h3>
-  <div class="search-container">
-    <!-- キャスト選択 -->
-    <div class="box">
-        <select id="castSelect">
-        <option value="">キャスト選択</option>
-        </select>
-    </div>
-    <div class="box">
-      <input type="text" id="search1" placeholder="アシスト1">
-      <div class="suggestions" id="sug1"></div>
-      <input type="text" id="search2" placeholder="アシスト2">
-      <div class="suggestions" id="sug2"></div>
-      <input type="text" id="search3" placeholder="アシスト3">
-      <div class="suggestions" id="sug3"></div>
-      <input type="text" id="search4" placeholder="アシスト4">
-      <div class="suggestions" id="sug4"></div>
-      <input type="text" id="search5" placeholder="ソウル">
-      <div class="suggestions" id="sug5"></div>
-    </div>
+<h3>キャスト・アシスト選択</h3>
+<div class="search-container">
+  <div class="box">
+    <select id="castSelect">
+      <option value="">キャスト選択</option>
+    </select>
   </div>
+  <div class="box">
+    <input type="text" id="search1" placeholder="アシスト1">
+    <div class="suggestions" id="sug1"></div>
+    <input type="text" id="search2" placeholder="アシスト2">
+    <div class="suggestions" id="sug2"></div>
+    <input type="text" id="search3" placeholder="アシスト3">
+    <div class="suggestions" id="sug3"></div>
+    <input type="text" id="search4" placeholder="アシスト4">
+    <div class="suggestions" id="sug4"></div>
+    <input type="text" id="search5" placeholder="ソウル">
+    <div class="suggestions" id="sug5"></div>
+  </div>
+</div>
 
-  <h3>選択したアシスト</h3>
-  <div class="table-wrapper">
+<h3>選択したアシスト</h3>
+<div class="table-wrapper">
   <table id="resultTable">
     <thead>
       <tr>
@@ -65,47 +64,51 @@
     </tbody>
   </table>
 </div>
-  <h3>レベル別DS値</h3>
 
-  <div class="table-wrapper">
-    <table id="summaryTable">
-        <thead>
-        <tr>
-            <th>レベル</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>DS値</td>
-            <td id="ds1">0</td>
-            <td id="ds2">0</td>
-            <td id="ds3">0</td>
-            <td id="ds4">0</td>
-            <td id="ds5">0</td>
-            <td id="ds6">0</td>
-            <td id="ds7">0</td>
-            <td id="ds8">0</td>
-            <tr id="judgeRow">
-                <td>1確残</td>
-                <td></td><td></td><td></td><td></td>
-                <td></td><td></td><td></td><td></td>
-            </tr>
-        </tr>
-        </tbody>
-    </table>
+<h3>レベル別DS値</h3>
+<div class="table-wrapper">
+  <table id="summaryTable">
+    <thead>
+      <tr>
+        <th>レベル</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+        <th>6</th>
+        <th>7</th>
+        <th>8</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>DS値</td>
+        <td id="ds1">0</td>
+        <td id="ds2">0</td>
+        <td id="ds3">0</td>
+        <td id="ds4">0</td>
+        <td id="ds5">0</td>
+        <td id="ds6">0</td>
+        <td id="ds7">0</td>
+        <td id="ds8">0</td>
+      </tr>
+      <tr id="judgeRow">
+        <td>1確残</td>
+        <td></td><td></td><td></td><td></td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
 <br>
-<p>キャスト・アシスト選択で調べたいキャストとアシストを選択してください。<br>選択したアシストの詳細と、1確まで残りどれくらい必要かを計算します。</p>
-<p>現状キャストはファイターのみの掲載となっています。<br>また、手作業でデータを登録しているためデータにミスがある可能性があります。ご了承ください。<br>情報の誤りや追加があれば製作者までご連絡下さい。</p>
+<p>キャスト・アシスト選択で調べたいキャストとアシストを選択してください。<br>
+選択したアシストの詳細と、1確まで残りどれくらい必要かを計算します。</p>
+<p>現状キャストはファイターのみの掲載となっています。<br>
+また、手作業でデータを登録しているためデータにミスがある可能性があります。ご了承ください。<br>
+情報の誤りや追加があれば製作者までご連絡下さい。</p>
 <!-- 2025/04/25 莉々 -->
-  <script src="wlwDSchecker.js"></script>
+<script src="wlwDSchecker.js"></script>
 </body>
 </html>
