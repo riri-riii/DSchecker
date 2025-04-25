@@ -9,13 +9,12 @@ function setupSearchBoxes() {
           
           // キーワードが空の場合は枠線を削除して終了
           if (!keyword) {
-              sugBox.classList.remove("active-border");
+              sugBox.classList.remove("active-border"); 
               return;
           }
 
           // キーワードがある場合は枠線を追加
           sugBox.classList.add("active-border");
-
           const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
           const matches = list.filter(item =>
               item.読み.toLowerCase().includes(keyword) ||
@@ -29,7 +28,7 @@ function setupSearchBoxes() {
               div.onclick = () => {
                   input.value = item.アシスト名;
                   sugBox.innerHTML = "";
-                  input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
+                  sugBox.classList.remove("active-border"); 
                   addToTable(item);
               };
               sugBox.appendChild(div);
@@ -39,7 +38,7 @@ function setupSearchBoxes() {
       input.addEventListener("blur", () => {
           setTimeout(() => {
               sugBox.innerHTML = "";
-              input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
+              sugBox.classList.remove("active-border"); 
           }, 200);
       });
 
