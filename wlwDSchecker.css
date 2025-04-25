@@ -15,7 +15,7 @@
 input, select {
   padding-bottom:1px;
   padding: 5px;
-  border: none;
+  border: 1px;
   border-bottom: 20px;
   outline: 1px;
   width: 150px;
@@ -35,7 +35,6 @@ input, select {
   background-color: white;
   z-index: 1050; /* 他の要素よりも上に表示 */
   width: 100%;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 影を追加して視認性向上 */
 }
 
 .suggestions div {
