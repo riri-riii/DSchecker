@@ -36,6 +36,7 @@ input, select {
   z-index: 1050; /* 他の要素よりも上に表示 */
   width: 100%;
 }
+
 /* 枠線を目立たせるスタイル */
 .active-border {
     border: 1px solid #c0c0c0;
