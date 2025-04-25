@@ -15,9 +15,16 @@ function setupSearchBoxes() {
 
             // matches が空の場合は枠線を削除して終了
             if (matches.length === 0) {
-                sugBox.classList.remove("active-border");
+                element.style.border = 'none'; // 枠線を削除
                 return;
             }
+            
+            // サジェストボックスからアイテムを選択した時にも枠線を削除
+            suggestionBox.addEventListener('click', function(event) {
+                if (event.target && event.target.matches('.suggestion-item')) {
+                    element.style.border = 'none'; // 枠線を削除
+                }
+            });
 
             // matches に結果がある場合は枠線を追加
             sugBox.classList.add("active-border");
