@@ -1,61 +1,54 @@
 function setupSearchBoxes() {
-    config.forEach(cfg => {
-        const input = document.getElementById(cfg.search);
-        const sugBox = document.getElementById(cfg.sug);
+  config.forEach(cfg => {
+      const input = document.getElementById(cfg.search);
+      const sugBox = document.getElementById(cfg.sug);
 
-        input.addEventListener("input", () => {
-            const keyword = input.value.toLowerCase();
-            sugBox.innerHTML = "";
+      input.addEventListener("input", () => {
+          const keyword = input.value.toLowerCase();
+          sugBox.innerHTML = "";
+          
+          // キーワードが空の場合は枠線を削除して終了
+          if (!keyword) {
+              sugBox.classList.remove("active-border");
+              return;
+          }
 
-            const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
-            const matches = list.filter(item =>
-                item.読み.toLowerCase().includes(keyword) ||
-                item.アシスト名.toLowerCase().includes(keyword)
-            );
+          // キーワードがある場合は枠線を追加
+          sugBox.classList.add("active-border");
 
-            // matches が空の場合は枠線を削除して終了
-            if (matches.length === 0) {
-                element.style.border = 'none'; // 枠線を削除
-                return;
-            }
-            
-            // サジェストボックスからアイテムを選択した時にも枠線を削除
-            suggestionBox.addEventListener('click', function(event) {
-                if (event.target && event.target.matches('.suggestion-item')) {
-                    element.style.border = 'none'; // 枠線を削除
-                }
-            });
+          const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
+          const matches = list.filter(item =>
+              item.読み.toLowerCase().includes(keyword) ||
+              item.アシスト名.toLowerCase().includes(keyword)
+          );
 
-            // matches に結果がある場合は枠線を追加
-            sugBox.classList.add("active-border");
+          matches.forEach(item => {
+              const div = document.createElement("div");
+              div.textContent = item.アシスト名;
+              div.className = "suggestion-item";
+              div.onclick = () => {
+                  input.value = item.アシスト名;
+                  sugBox.innerHTML = "";
+                  input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
+                  addToTable(item);
+              };
+              sugBox.appendChild(div);
+          });
+      });
 
-            matches.forEach(item => {
-                const div = document.createElement("div");
-                div.textContent = item.アシスト名;
-                div.className = "suggestion-item";
-                div.onclick = () => {
-                    input.value = item.アシスト名;
-                    sugBox.innerHTML = "";
-                    input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
-                    addToTable(item);
-                };
-                sugBox.appendChild(div);
-            });
-        });
+      input.addEventListener("blur", () => {
+          setTimeout(() => {
+              sugBox.innerHTML = "";
+              input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
+          }, 200);
+      });
 
-        input.addEventListener("blur", () => {
-            setTimeout(() => {
-                sugBox.innerHTML = "";
-                input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
-            }, 200);
-        });
-
-        input.addEventListener("focus", () => {
-            if (sugBox.children.length > 0) {
-                input.classList.add("active-border"); // フォーカス時にサジェストがある場合は枠線追加
-            }
-        });
-    });
+      input.addEventListener("focus", () => {
+          if (sugBox.children.length > 0) {
+              input.classList.add("active-border"); // フォーカス時にサジェストがある場合は枠線追加
+          }
+      });
+  });
 }
 
   function addToTable(item) {
