@@ -1,38 +1,55 @@
 function setupSearchBoxes() {
     config.forEach(cfg => {
-      const input = document.getElementById(cfg.search);
-      const sugBox = document.getElementById(cfg.sug);
+        const input = document.getElementById(cfg.search);
+        const sugBox = document.getElementById(cfg.sug);
 
-      input.addEventListener("input", () => {
-        const keyword = input.value.toLowerCase();
-        sugBox.innerHTML = "";
-        if (!keyword) return;
-
-        const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
-        const matches = list.filter(item =>
-          item.読み.toLowerCase().includes(keyword) ||
-          item.アシスト名.toLowerCase().includes(keyword)
-        );
-
-        matches.forEach(item => {
-          const div = document.createElement("div");
-          div.textContent = item.アシスト名;
-          div.className = "suggestion-item";
-          div.onclick = () => {
-            input.value = item.アシスト名;
+        input.addEventListener("input", () => {
+            const keyword = input.value.toLowerCase();
             sugBox.innerHTML = "";
-            addToTable(item);
-          };
-          sugBox.appendChild(div);
+            
+            // キーワードが空の場合は枠線を削除して終了
+            if (!keyword) {
+                input.classList.remove("active-border");
+                return;
+            }
+
+            // キーワードがある場合は枠線を追加
+            input.classList.add("active-border");
+
+            const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
+            const matches = list.filter(item =>
+                item.読み.toLowerCase().includes(keyword) ||
+                item.アシスト名.toLowerCase().includes(keyword)
+            );
+
+            matches.forEach(item => {
+                const div = document.createElement("div");
+                div.textContent = item.アシスト名;
+                div.className = "suggestion-item";
+                div.onclick = () => {
+                    input.value = item.アシスト名;
+                    sugBox.innerHTML = "";
+                    input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
+                    addToTable(item);
+                };
+                sugBox.appendChild(div);
+            });
         });
-      });
+
         input.addEventListener("blur", () => {
-        setTimeout(() => {
-        sugBox.innerHTML = "";
-        }, 200);
-      });
+            setTimeout(() => {
+                sugBox.innerHTML = "";
+                input.classList.remove("active-border"); // サジェスト閉じたら枠線削除
+            }, 200);
+        });
+
+        input.addEventListener("focus", () => {
+            if (sugBox.children.length > 0) {
+                input.classList.add("active-border"); // フォーカス時にサジェストがある場合は枠線追加
+            }
+        });
     });
-  }
+}
 
   function addToTable(item) {
     const index = config.findIndex(cfg => document.getElementById(cfg.search).value === item.アシスト名);
