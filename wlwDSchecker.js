@@ -6,21 +6,21 @@ function setupSearchBoxes() {
         input.addEventListener("input", () => {
             const keyword = input.value.toLowerCase();
             sugBox.innerHTML = "";
-            
-            // キーワードが空の場合は枠線を削除して終了
-            if (!keyword) {
-                sugBox.classList.remove("active-border");
-                return;
-            }
-
-            // キーワードがある場合は枠線を追加
-            sugBox.classList.add("active-border");
 
             const list = (cfg.source === "a" ? dataA : dataB).filter(cfg.filter);
             const matches = list.filter(item =>
                 item.読み.toLowerCase().includes(keyword) ||
                 item.アシスト名.toLowerCase().includes(keyword)
             );
+
+            // matches が空の場合は枠線を削除して終了
+            if (matches.length === 0) {
+                sugBox.classList.remove("active-border");
+                return;
+            }
+
+            // matches に結果がある場合は枠線を追加
+            sugBox.classList.add("active-border");
 
             matches.forEach(item => {
                 const div = document.createElement("div");
