@@ -9,6 +9,17 @@ function setupSearchBoxes() {
 
       if (!keyword) {
         sugBox.classList.remove("active-border");
+
+        // 検索ボックスが空白の場合、resultTableの該当列をクリア
+        const index = config.findIndex(c => c.search === cfg.search);
+        if (index !== -1) {
+          const tableBody = document.getElementById("resultTable").querySelector("tbody");
+          const rows = tableBody.querySelectorAll("tr");
+          rows.forEach(row => {
+            row.cells[index + 1].innerText = "";
+          });
+        }
+        updateSummaryTable();
         return;
       }
 
@@ -22,7 +33,7 @@ function setupSearchBoxes() {
       matches.forEach(item => {
         const div = document.createElement("div");
         div.textContent = item.アシスト名;
-        div.clｓｓassName = "suggestion-item";
+        div.className = "suggestion-item";
         div.onclick = () => {
           input.value = item.アシスト名;
           sugBox.innerHTML = "";
@@ -167,8 +178,8 @@ Promise.all([
 }).catch(err => console.error("データ読み込みエラー:", err));
 
 
-document.getElementById("clearButton").addEventListener("click", () => {
   // 各検索ボックスの内容をクリア
+document.getElementById("clearButton").addEventListener("click", () => {
   for (let i = 1; i <= 5; i++) {
     const input = document.getElementById(`search${i}`);
     const sugBox = document.getElementById(`sug${i}`);
@@ -183,7 +194,6 @@ document.getElementById("clearButton").addEventListener("click", () => {
       }
     });
   }
-
   // サマリーテーブルを更新
   updateSummaryTable();
 });

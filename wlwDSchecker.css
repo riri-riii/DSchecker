@@ -9,40 +9,63 @@
 .box {
   display: inline-block;
   position: relative;
+  flex: auto;
 }
 
-input {
+select {
+  font-size: large;
   padding-bottom:1px;
   padding: 10px;
   border: 1px solid #c0c0c0;
   outline: 1px;
-  width: 190px;
-  height: 37px;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   background-color: white;
 }
 
-select {
+input {
+  font-size: large;
   padding-bottom:1px;
   padding: 10px;
   border: 1px solid #c0c0c0;
   outline: 1px;
-  width: 120px;
-  height: 37px;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   background-color: white;
 }
 
 button {
+  font-size: large;
   padding-bottom:1px;
   border: 1px solid #c0c0c0;
   background-color: #f0f0f0;
   cursor: pointer;
-  height: 37px;
-  width: 68px;
+  width: 100%;
+  height: 100%;
 }
 button:hover {
   background-color: #e0e0e0;
+}
+
+th, td {
+  /* font-size: large; */
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+th {
+  width: 100%;
+  height: 100%;
+  font-size: large;
+  background-color: #f4f4f4;
 }
 
 .suggestions {
@@ -59,10 +82,6 @@ button:hover {
 .active-border {
   border: 1px solid #c0c0c0; /* サジェストボックスの枠線を表示 */
   z-index: 1000; /* サジェストボックスのz-indexを上げる */
-}
-
-.box {
-  position: relative; /* suggestionsを検索ボックスの下に配置するために必要 */
 }
 
 .suggestions div {
@@ -84,42 +103,14 @@ button:hover {
 
 #resultTable,
 #summaryTable {
-  width: 1200px;
+  width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-th, td {
-  border: 1px solid #ccc;
-  padding: 5px;
-  text-align: center;
-  height: 30px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-th {
-  background-color: #f4f4f4;
-}
-
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 500px) {
   input, select {
     font-size: 14px;
     width: 100%;
-  }
-
-  .box {
-    flex: 100%;
-  }
-
-  #resultTable,
-  #summaryTable {
-    width: 100%;
-  }
-
-  th, td {
-    font-size: 12px;
-    padding: 3px;
   }
 }
