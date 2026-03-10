@@ -212,7 +212,7 @@ button:active {
 
 #resultTable th:first-child,
 #resultTable td:first-child {
-  width: 30%;
+  width: 40%;
 }
 
 th, td {
@@ -312,3 +312,4 @@ footer ul li {
     width: 100%;
   }
 }
+
