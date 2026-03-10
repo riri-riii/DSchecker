@@ -1,9 +1,74 @@
-/* 検索ボックス周り */
+/* ===== 変数 ===== */
+:root {
+  --accent: #5c6bc0;
+  --accent-dark: #3f51b5;
+  --accent-light: #e8eaf6;
+  --bg: #f0f2f5;
+  --card-bg: #ffffff;
+  --text: #333333;
+  --text-muted: #666666;
+  --border: #e0e0e0;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== ベース ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* ===== コンテナ ===== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* ===== 見出し ===== */
+h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin: 0 0 16px 0;
+  padding-left: 10px;
+  border-left: 4px solid var(--accent);
+}
+
+/* ===== カードセクション ===== */
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* ===== 検索ボックス周り ===== */
 .search-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 10px;
 }
 
 .box {
@@ -13,92 +78,107 @@
 }
 
 select {
-  font-size: large;
-  padding-bottom:1px;
-  padding: 10px;
-  border: 1px solid #c0c0c0;
-  outline: 1px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1rem;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-  background-color: white;
+  background-color: #fff;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.15);
 }
 
 input {
-  font-size: large;
-  padding-bottom:1px;
-  padding: 10px;
-  border: 1px solid #c0c0c0;
-  outline: 1px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1rem;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-  background-color: white;
+  background-color: #fff;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.15);
+}
+
+input::placeholder {
+  color: #aaa;
 }
 
 button {
-  font-size: large;
-  padding-bottom:1px;
-  border: 1px solid #c0c0c0;
-  background-color: #f0f0f0;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent);
+  color: #fff;
   cursor: pointer;
   width: 100%;
   height: 100%;
+  transition: background-color 0.2s, transform 0.1s;
 }
+
 button:hover {
-  background-color: #e0e0e0;
+  background-color: var(--accent-dark);
 }
 
-th, td {
-  /* font-size: large; */
-  border: 1px solid #ccc;
-  padding: 5px;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+button:active {
+  transform: scale(0.97);
 }
 
-th {
-  width: 100%;
-  height: 100%;
-  font-size: large;
-  background-color: #f4f4f4;
-}
-
+/* ===== サジェスト ===== */
 .suggestions {
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   max-height: 150px;
   overflow-y: auto;
-  margin-top: 5px;
+  margin-top: 4px;
   position: absolute;
   background-color: white;
   z-index: -1;
-  width: 100%; /* 検索ボックスと同じ幅にする */
+  width: 100%;
+  border-radius: 8px;
 }
 
 .active-border {
-  border: 1px solid #c0c0c0; /* サジェストボックスの枠線を表示 */
-  z-index: 1000; /* サジェストボックスのz-indexを上げる */
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+  z-index: 1000;
 }
 
 .suggestions div {
-  padding: 8px;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.15s ease;
+  font-size: 0.95rem;
 }
 
 .suggestions div:hover {
-  background-color: #f0f0f0;
+  background-color: var(--accent-light);
 }
 
+/* ===== テーブル ===== */
 .table-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   width: 100%;
-  margin-top: 20px;
+  border-radius: 8px;
 }
 
 #resultTable,
@@ -108,25 +188,100 @@ th {
   border-collapse: collapse;
 }
 
-@media screen and (max-width: 500px) {
-  input, select {
-    font-size: 14px;
-    width: 100%;
-  }
+th, td {
+  border: 1px solid var(--border);
+  padding: 8px 6px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.title-icon {
-  width: 30px;
-  height: 30px;
-  vertical-align: middle;
-  margin-left: 5px;
+th {
+  font-size: 0.95rem;
+  font-weight: 700;
+  background-color: var(--accent);
+  color: #fff;
+}
+
+td {
+  font-size: 0.9rem;
+  background-color: #fff;
+}
+
+tbody tr:hover td {
+  background-color: var(--accent-light);
+}
+
+/* ===== 説明文 ===== */
+.info-text {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.info-text p {
+  margin: 0 0 10px 0;
+}
+
+.info-text p:last-child {
+  margin-bottom: 0;
+}
+
+.author {
+  text-align: right;
+  font-weight: 500;
+  color: var(--accent-dark) !important;
+}
+
+/* ===== フッター ===== */
+footer {
+  margin-top: 20px;
+  padding: 20px 0;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+footer h3 {
+  margin-top: 0;
 }
 
 footer ul {
   max-height: 150px;
   overflow-y: auto;
-  padding-left: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #fff;
+  padding: 10px 10px 10px 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--bg);
+  margin: 0;
+  list-style: disc;
+}
+
+footer ul li {
+  padding: 3px 0;
+}
+
+/* ===== アイコン ===== */
+.title-icon {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+/* ===== レスポンシブ ===== */
+@media screen and (max-width: 500px) {
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  input, select, button {
+    font-size: 14px;
+    width: 100%;
+  }
 }
