@@ -212,7 +212,7 @@ button:active {
 
 #resultTable th:first-child,
 #resultTable td:first-child {
-  width: 50%;
+  width: 30%;
 }
 
 th, td {
