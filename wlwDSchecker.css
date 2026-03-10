@@ -74,7 +74,7 @@ h3 {
 .box {
   display: inline-block;
   position: relative;
-  flex: auto;
+  flex: 1 1 0;
 }
 
 select {

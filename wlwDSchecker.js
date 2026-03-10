@@ -180,6 +180,7 @@ Promise.all([
 
   // 各検索ボックスの内容をクリア
 document.getElementById("clearButton").addEventListener("click", () => {
+  if (!confirm("選択内容をリセットしますか？")) return;
   for (let i = 1; i <= 5; i++) {
     const input = document.getElementById(`search${i}`);
     const sugBox = document.getElementById(`sug${i}`);
