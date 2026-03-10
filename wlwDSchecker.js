@@ -15,10 +15,11 @@ function setupSearchBoxes() {
         if (index !== -1) {
           const tableBody = document.getElementById("resultTable").querySelector("tbody");
           const rows = tableBody.querySelectorAll("tr");
+          rows[index].cells[0].innerText = placeholderNames[index];
+          rows[index].cells[0].classList.add("placeholder-text");
           rows[index].cells[1].innerText = "";
           rows[index].cells[2].innerText = "";
           rows[index].cells[3].innerText = "";
-          rows[index].cells[4].innerText = "";
         }
         updateSummaryTable();
         return;
@@ -67,10 +68,11 @@ function addToTable(item) {
   const tableBody = document.getElementById("resultTable").querySelector("tbody");
   const rows = tableBody.querySelectorAll("tr");
 
-  rows[index].cells[1].innerText = item.アシスト名;
-  rows[index].cells[2].innerText = item.レベル;
-  rows[index].cells[3].innerText = parseFloat(item.DS値).toFixed(2);
-  rows[index].cells[4].innerText = item.カテゴリ;
+  rows[index].cells[0].innerText = item.アシスト名;
+  rows[index].cells[0].classList.remove("placeholder-text");
+  rows[index].cells[1].innerText = item.レベル;
+  rows[index].cells[2].innerText = parseFloat(item.DS値).toFixed(2);
+  rows[index].cells[3].innerText = item.カテゴリ;
   updateSummaryTable();
 }
 
@@ -83,8 +85,8 @@ function updateSummaryTable() {
 
   // 各行（アシスト/ソウル）のデータを取得
   for (let i = 0; i < rows.length; i++) {
-    const level = parseInt(rows[i].cells[2].innerText);
-    const ds = parseFloat(rows[i].cells[3].innerText);
+    const level = parseInt(rows[i].cells[1].innerText);
+    const ds = parseFloat(rows[i].cells[2].innerText);
     if (!isNaN(level) && !isNaN(ds)) {
       levels.push(level);
       dsValues.push(ds);
@@ -171,6 +173,8 @@ function populateCastSelect() {
   });
 }
 
+const placeholderNames = ["アシスト1", "アシスト2", "アシスト3", "アシスト4", "ソウル"];
+
 let dataA = [], dataB = [], castData = [];
 
 const config = [
@@ -200,17 +204,16 @@ document.getElementById("clearButton").addEventListener("click", () => {
   for (let i = 1; i <= 5; i++) {
     const input = document.getElementById(`search${i}`);
     const sugBox = document.getElementById(`sug${i}`);
-    const table = document.getElementById("resultTable");
-    if (input) input.value = ""; // 入力内容をクリア
-    if (sugBox) sugBox.innerHTML = ""; // サジェストボックスをクリア
-    // テーブルの1列目以外をクリア
-    const rows = table.querySelectorAll("tbody tr");
-    rows.forEach(row => {
-      for (let j = 1; j < row.cells.length; j++) {
-        row.cells[j].innerText = "";
-      }
-    });
+    if (input) input.value = "";
+    if (sugBox) sugBox.innerHTML = "";
   }
-  // サマリーテーブルを更新
+  const rows = document.getElementById("resultTable").querySelectorAll("tbody tr");
+  rows.forEach((row, rowIndex) => {
+    row.cells[0].innerText = placeholderNames[rowIndex];
+    row.cells[0].classList.add("placeholder-text");
+    for (let j = 1; j < row.cells.length; j++) {
+      row.cells[j].innerText = "";
+    }
+  });
   updateSummaryTable();
 });

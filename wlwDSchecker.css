@@ -76,6 +76,14 @@ h3 {
   gap: 10px;
 }
 
+.search-row-clear {
+  justify-content: flex-end;
+}
+
+.search-row-clear .box {
+  flex: 0 0 120px;
+}
+
 .box {
   display: inline-block;
   position: relative;
@@ -191,10 +199,15 @@ button:active {
 }
 
 #resultTable,
-#summaryTable {
+#summaryTable,
+#summaryTable2 {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
+}
+
+.placeholder-text {
+  color: #bbb;
 }
 
 th, td {
