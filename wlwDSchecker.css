@@ -60,8 +60,8 @@ h3 {
   background-color: var(--card-bg);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 14px;
+  margin-bottom: 14px;
 }
 
 /* ===== 検索ボックス周り ===== */
