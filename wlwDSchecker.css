@@ -67,7 +67,12 @@ h3 {
 /* ===== 検索ボックス周り ===== */
 .search-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-row {
+  display: flex;
   gap: 10px;
 }
 
@@ -75,6 +80,10 @@ h3 {
   display: inline-block;
   position: relative;
   flex: 1 1 0;
+}
+
+.table-wrapper-mt {
+  margin-top: 10px;
 }
 
 select {

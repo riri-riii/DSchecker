@@ -23,33 +23,37 @@
 <section class="card">
   <h3>キャスト・アシスト選択</h3>
   <div class="search-container">
-    <div class="box">
-      <select id="castSelect">
-        <option value="">キャスト選択</option>
-      </select>
+    <div class="search-row">
+      <div class="box">
+        <select id="castSelect">
+          <option value="">キャスト選択</option>
+        </select>
+      </div>
+      <div class="box">
+        <input type="text" id="search1" placeholder="アシスト1">
+        <div class="suggestions" id="sug1"></div>
+      </div>
+      <div class="box">
+        <input type="text" id="search2" placeholder="アシスト2">
+        <div class="suggestions" id="sug2"></div>
+      </div>
     </div>
-    <div class="box">
-      <input type="text" id="search1" placeholder="アシスト1">
-      <div class="suggestions" id="sug1"></div>
-    </div>
-    <div class="box">
-      <input type="text" id="search2" placeholder="アシスト2">
-      <div class="suggestions" id="sug2"></div>
-    </div>
-    <div class="box">
-      <input type="text" id="search3" placeholder="アシスト3">
-      <div class="suggestions" id="sug3"></div>
-    </div>
-    <div class="box">
-      <input type="text" id="search4" placeholder="アシスト4">
-      <div class="suggestions" id="sug4"></div>
-    </div>
-    <div class="box">
-      <input type="text" id="search5" placeholder="ソウル">
-      <div class="suggestions" id="sug5"></div>
-    </div>
-    <div class="box">
-      <button id="clearButton">クリア</button>
+    <div class="search-row">
+      <div class="box">
+        <input type="text" id="search3" placeholder="アシスト3">
+        <div class="suggestions" id="sug3"></div>
+      </div>
+      <div class="box">
+        <input type="text" id="search4" placeholder="アシスト4">
+        <div class="suggestions" id="sug4"></div>
+      </div>
+      <div class="box">
+        <input type="text" id="search5" placeholder="ソウル">
+        <div class="suggestions" id="sug5"></div>
+      </div>
+      <div class="box">
+        <button id="clearButton">クリア</button>
+      </div>
     </div>
   </div>
 </section>
@@ -61,30 +65,18 @@
       <thead>
         <tr>
           <th>項目</th>
-          <th>アシスト1</th>
-          <th>アシスト2</th>
-          <th>アシスト3</th>
-          <th>アシスト4</th>
-          <th>ソウル</th>
+          <th>アシスト名</th>
+          <th>レベル</th>
+          <th>DS値</th>
+          <th>カテゴリ</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>アシスト名</td>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td>レベル</td>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td>DS値</td>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
-        <tr>
-          <td>カテゴリ</td>
-          <td></td><td></td><td></td><td></td><td></td>
-        </tr>
+        <tr><td>アシスト1</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>アシスト2</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>アシスト3</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>アシスト4</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>ソウル</td><td></td><td></td><td></td><td></td></tr>
       </tbody>
     </table>
   </div>
@@ -97,31 +89,36 @@
       <thead>
         <tr>
           <th>レベル</th>
-          <th>1</th>
-          <th>2</th>
-          <th>3</th>
-          <th>4</th>
-          <th>5</th>
-          <th>6</th>
-          <th>7</th>
-          <th>8</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>DS値</td>
-          <td id="ds1">0</td>
-          <td id="ds2">0</td>
-          <td id="ds3">0</td>
-          <td id="ds4">0</td>
-          <td id="ds5">0</td>
-          <td id="ds6">0</td>
-          <td id="ds7">0</td>
-          <td id="ds8">0</td>
+          <td id="ds1">0</td><td id="ds2">0</td><td id="ds3">0</td><td id="ds4">0</td>
         </tr>
         <tr id="judgeRow">
           <td>1確残</td>
           <td></td><td></td><td></td><td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrapper table-wrapper-mt">
+    <table id="summaryTable2">
+      <thead>
+        <tr>
+          <th>レベル</th>
+          <th>5</th><th>6</th><th>7</th><th>8</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DS値</td>
+          <td id="ds5">0</td><td id="ds6">0</td><td id="ds7">0</td><td id="ds8">0</td>
+        </tr>
+        <tr id="judgeRow2">
+          <td>1確残</td>
           <td></td><td></td><td></td><td></td>
         </tr>
       </tbody>

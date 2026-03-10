@@ -10,14 +10,15 @@ function setupSearchBoxes() {
       if (!keyword) {
         sugBox.classList.remove("active-border");
 
-        // 検索ボックスが空白の場合、resultTableの該当列をクリア
+        // 検索ボックスが空白の場合、resultTableの該当行をクリア
         const index = config.findIndex(c => c.search === cfg.search);
         if (index !== -1) {
           const tableBody = document.getElementById("resultTable").querySelector("tbody");
           const rows = tableBody.querySelectorAll("tr");
-          rows.forEach(row => {
-            row.cells[index + 1].innerText = "";
-          });
+          rows[index].cells[1].innerText = "";
+          rows[index].cells[2].innerText = "";
+          rows[index].cells[3].innerText = "";
+          rows[index].cells[4].innerText = "";
         }
         updateSummaryTable();
         return;
@@ -66,26 +67,24 @@ function addToTable(item) {
   const tableBody = document.getElementById("resultTable").querySelector("tbody");
   const rows = tableBody.querySelectorAll("tr");
 
-  rows[0].cells[index + 1].innerText = item.アシスト名;
-  rows[1].cells[index + 1].innerText = item.レベル;
-  rows[2].cells[index + 1].innerText = parseFloat(item.DS値).toFixed(2); // 小数点以下3桁で丸める
-  rows[3].cells[index + 1].innerText = item.カテゴリ;
+  rows[index].cells[1].innerText = item.アシスト名;
+  rows[index].cells[2].innerText = item.レベル;
+  rows[index].cells[3].innerText = parseFloat(item.DS値).toFixed(2);
+  rows[index].cells[4].innerText = item.カテゴリ;
   updateSummaryTable();
-  sugBox.classList.remove("active-border");
 }
 
 function updateSummaryTable() {
   const tableBody = document.getElementById("resultTable").querySelector("tbody");
-  const levelRow = tableBody.querySelectorAll("tr")[1].cells;
-  const dsRow = tableBody.querySelectorAll("tr")[2].cells;
+  const rows = tableBody.querySelectorAll("tr");
 
   const levels = [];
   const dsValues = [];
 
-  // 各列のデータを取得
-  for (let i = 1; i < levelRow.length; i++) {
-    const level = parseInt(levelRow[i].innerText);
-    const ds = parseFloat(dsRow[i].innerText);
+  // 各行（アシスト/ソウル）のデータを取得
+  for (let i = 0; i < rows.length; i++) {
+    const level = parseInt(rows[i].cells[2].innerText);
+    const ds = parseFloat(rows[i].cells[3].innerText);
     if (!isNaN(level) && !isNaN(ds)) {
       levels.push(level);
       dsValues.push(ds);
@@ -93,9 +92,8 @@ function updateSummaryTable() {
   }
 
   // サマリーテーブルを更新
-  const summaryCells = document.querySelector("#summaryTable tbody tr").cells;
   for (let i = 1; i <= 8; i++) {
-    summaryCells[i].innerText = "0";
+    document.getElementById("ds" + i).innerText = "0";
   }
 
   for (let i = 1; i <= 8; i++) {
@@ -105,16 +103,19 @@ function updateSummaryTable() {
         total += dsValues[j];
       }
     }
-    summaryCells[i].innerText = total.toFixed(2); // 小数点以下3桁で丸める
+    document.getElementById("ds" + i).innerText = total.toFixed(2);
   }
 
   const judgeRow = document.getElementById("judgeRow");
+  const judgeRow2 = document.getElementById("judgeRow2");
   const castName = document.getElementById("castSelect").value;
 
   if (!castName) {
-    for (let i = 1; i <= 8; i++) {
+    for (let i = 1; i <= 4; i++) {
       judgeRow.cells[i].innerText = "";
       judgeRow.cells[i].style.color = "";
+      judgeRow2.cells[i].innerText = "";
+      judgeRow2.cells[i].style.color = "";
     }
     return;
   }
@@ -122,12 +123,12 @@ function updateSummaryTable() {
   const cast = castData.find(c => c.キャスト === castName);
   if (!cast) return;
 
-  for (let i = 2; i <= 7; i++) {
+  // Lv2-4 (judgeRow: cells[2]=Lv2, cells[3]=Lv3, cells[4]=Lv4)
+  for (let i = 2; i <= 4; i++) {
     const required = parseFloat(cast[i]);
-    const actual = parseFloat(summaryCells[i].innerText);
+    const actual = parseFloat(document.getElementById("ds" + i).innerText);
     const diff = actual - required;
     const cell = judgeRow.cells[i];
-
     if (actual >= required) {
       cell.innerText = `+${diff.toFixed(2)}`;
       cell.style.color = "green";
@@ -137,8 +138,23 @@ function updateSummaryTable() {
     }
   }
 
-  judgeRow.cells[1].innerText = "-";
-  judgeRow.cells[8].innerText = "-";
+  // Lv5-7 (judgeRow2: cells[1]=Lv5, cells[2]=Lv6, cells[3]=Lv7)
+  for (let i = 5; i <= 7; i++) {
+    const required = parseFloat(cast[i]);
+    const actual = parseFloat(document.getElementById("ds" + i).innerText);
+    const diff = actual - required;
+    const cell = judgeRow2.cells[i - 4];
+    if (actual >= required) {
+      cell.innerText = `+${diff.toFixed(2)}`;
+      cell.style.color = "green";
+    } else {
+      cell.innerText = `${diff.toFixed(2)}`;
+      cell.style.color = "red";
+    }
+  }
+
+  judgeRow.cells[1].innerText = "-";   // Lv1
+  judgeRow2.cells[4].innerText = "-";  // Lv8
 }
 
 function populateCastSelect() {
