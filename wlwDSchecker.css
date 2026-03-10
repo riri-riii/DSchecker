@@ -210,6 +210,11 @@ button:active {
   color: #bbb;
 }
 
+#resultTable th:first-child,
+#resultTable td:first-child {
+  width: 50%;
+}
+
 th, td {
   border: 1px solid var(--border);
   padding: 8px 6px;
