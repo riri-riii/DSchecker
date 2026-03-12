@@ -311,6 +311,14 @@ document.getElementById("recordButton").addEventListener("click", () => {
     alert("検証アシスト名を入力してください。");
     return;
   }
+  if (!document.getElementById("castSelect").value) {
+    alert("キャストを選択してください。");
+    return;
+  }
+  if (!document.querySelector("#measureTable .cb-check:checked")) {
+    alert("記録する行を少なくとも1つチェックしてください。");
+    return;
+  }
   document.getElementById("supplementInput").value = "";
   document.getElementById("recordModal").classList.remove("hidden");
 });
@@ -395,6 +403,8 @@ document.getElementById("clearButton").addEventListener("click", () => {
   }
 
   selectedItems = [null, null, null, null, null];
+  document.querySelectorAll("#measureTable .cb-check, #measureTable .result-check")
+    .forEach(cb => { cb.checked = false; });
   updateMeasureTable();
 });
 
