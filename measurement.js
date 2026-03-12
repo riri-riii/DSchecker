@@ -22,7 +22,7 @@ function saveAuth() {
 function updateAuthUI() {
   const authed = isAuthenticated();
   const btn = document.getElementById("authButton");
-  btn.textContent = authed ? "認証済み" : "ご協力者様はこちら";
+  btn.textContent = authed ? "使用方法" : "ご協力者様はこちら";
   btn.classList.toggle("authenticated", authed);
 
   const display = authed ? "" : "none";
@@ -414,7 +414,25 @@ document.getElementById("reloadLogButton").addEventListener("click", () => {
 });
 
 /* ===== 認証モーダル ===== */
-document.getElementById("authButton").addEventListener("click", showAuthModal);
+function showUsageModal() {
+  document.getElementById("usageModal").classList.remove("hidden");
+}
+
+document.getElementById("authButton").addEventListener("click", () => {
+  if (isAuthenticated()) {
+    showUsageModal();
+  } else {
+    showAuthModal();
+  }
+});
+
+document.getElementById("usageModalOverlay").addEventListener("click", () => {
+  document.getElementById("usageModal").classList.add("hidden");
+});
+
+document.getElementById("closeUsage").addEventListener("click", () => {
+  document.getElementById("usageModal").classList.add("hidden");
+});
 
 document.getElementById("authModalOverlay").addEventListener("click", () => {
   document.getElementById("authModal").classList.add("hidden");
