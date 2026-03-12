@@ -248,22 +248,6 @@ input[type="checkbox"] {
   accent-color: var(--accent);
 }
 
-/* ===== 1確残入力 ===== */
-.ichikaku-input {
-  width: 100% !important;
-  height: auto !important;
-  padding: 4px 6px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 4px !important;
-  text-align: center;
-  font-size: 0.85rem !important;
-}
-
-.ichikaku-input:focus {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 2px rgba(67, 160, 71, 0.15) !important;
-}
-
 /* ===== ログ表示 ===== */
 #logContainer {
   display: flex;
@@ -285,9 +269,15 @@ input[type="checkbox"] {
   font-size: 0.88rem;
 }
 
+.log-header {
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
 .log-line {
-  font-family: 'Noto Sans JP', monospace;
-  padding: 2px 0;
+  padding: 1px 0 1px 8px;
   color: var(--text);
   word-break: break-all;
 }
@@ -308,12 +298,6 @@ input[type="checkbox"] {
 .result-ng {
   color: #c62828;
   font-weight: 700;
-}
-
-.log-timestamp {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  margin-bottom: 4px;
 }
 
 /* ===== モーダル ===== */

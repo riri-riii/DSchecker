@@ -19,7 +19,7 @@ function initTable() {
       `<td><input type="checkbox" class="cb-check"></td>` +
       `<td class="level-cell">${i}</td>` +
       `<td class="ds-cell">0.00</td>` +
-      `<td><input type="text" class="ichikaku-input" placeholder="-"></td>` +
+      `<td class="ichikaku-cell">-</td>` +
       `<td><input type="checkbox" class="result-check"></td>`;
     tbody.appendChild(tr);
   }
@@ -114,16 +114,16 @@ function updateMeasureTable() {
     rows[i].querySelector(".ds-cell").textContent = total.toFixed(2);
 
     // 1確残: キャストが選択されていれば自動計算（Lv1・Lv8は対象外）
-    const ichikakuInput = rows[i].querySelector(".ichikaku-input");
+    const ichikakuCell = rows[i].querySelector(".ichikaku-cell");
     const required = cast ? parseFloat(cast[level]) : NaN;
 
     if (cast && !isNaN(required) && required > 0) {
       const diff = total - required;
-      ichikakuInput.placeholder = (diff >= 0 ? "+" : "") + diff.toFixed(2);
-    } else if (level === 1 || level === 8) {
-      ichikakuInput.placeholder = "-";
+      ichikakuCell.textContent = (diff >= 0 ? "+" : "") + diff.toFixed(2);
+      ichikakuCell.style.color = diff >= 0 ? "#2e7d32" : "#c62828";
     } else {
-      ichikakuInput.placeholder = "-";
+      ichikakuCell.textContent = "-";
+      ichikakuCell.style.color = "";
     }
   }
 }
@@ -164,13 +164,13 @@ function renderLog() {
     const assistStr = assistParts.length > 0 ? "_" + assistParts.join("_") : "";
     const header = `${entry.検証アシスト名}[${entry.キャスト}${assistStr}]`;
 
-    let html = `<div class="log-timestamp">${formatTimestamp(entry.timestamp)}</div>`;
+    let html = `<div class="log-header">${escapeHtml(header)}</div>`;
 
     for (const row of entry.データ) {
       const resultChar = row.結果 ? "○" : "×";
       const resultClass = row.結果 ? "result-ok" : "result-ng";
       const ichikaku = row["1確残"] || "-";
-      html += `<div class="log-line">${header} レベル${row.レベル}(${row.DS値})：${ichikaku}<span class="${resultClass}">${resultChar}</span></div>`;
+      html += `<div class="log-line">レベル${row.レベル}(${row.DS値})：${ichikaku}<span class="${resultClass}">${resultChar}</span></div>`;
     }
 
     if (entry.補足) {
@@ -179,20 +179,6 @@ function renderLog() {
 
     div.innerHTML = html;
     container.appendChild(div);
-  }
-}
-
-function formatTimestamp(iso) {
-  try {
-    const d = new Date(iso);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    const h = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${y}-${m}-${day} ${h}:${min}`;
-  } catch {
-    return iso;
   }
 }
 
@@ -232,8 +218,7 @@ document.getElementById("confirmRecord").addEventListener("click", () => {
 
     const level = i + 1;
     const dsValue = rows[i].querySelector(".ds-cell").textContent;
-    const ichikakuInput = rows[i].querySelector(".ichikaku-input");
-    const ichikaku = ichikakuInput.value.trim() || ichikakuInput.placeholder || "-";
+    const ichikaku = rows[i].querySelector(".ichikaku-cell").textContent || "-";
     const result = rows[i].querySelector(".result-check").checked;
 
     data.push({
