@@ -22,7 +22,7 @@ function saveAuth() {
 function updateAuthUI() {
   const authed = isAuthenticated();
   const btn = document.getElementById("authButton");
-  btn.textContent = authed ? "認証済み" : "ご協力者様ですか？";
+  btn.textContent = authed ? "認証済み" : "ご協力者様はこちら";
   btn.classList.toggle("authenticated", authed);
 
   const display = authed ? "" : "none";
