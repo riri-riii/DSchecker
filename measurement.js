@@ -231,7 +231,7 @@ async function renderLog() {
     const div = document.createElement("div");
     div.className = "log-entry";
 
-    const assistParts = entry.アシスト.filter(a => a);
+    const assistParts = (entry.アシスト || []).filter(a => a);
     const assistStr = assistParts.length > 0 ? assistParts.join("") : "（アシストなし）";
     const header = `${entry.検証アシスト名}[${entry.キャスト}_${assistStr}]`;
 
