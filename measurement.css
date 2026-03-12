@@ -1,0 +1,430 @@
+/* ===== 変数 ===== */
+:root {
+  --accent: #43a047;
+  --accent-dark: #2e7d32;
+  --accent-light: #e8f5e9;
+  --bg: #f0f5f0;
+  --card-bg: #ffffff;
+  --text: #333333;
+  --text-muted: #666666;
+  --border: #e0e0e0;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== ベース ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* ===== コンテナ ===== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* ===== 見出し ===== */
+h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin: 0 0 16px 0;
+  padding-left: 10px;
+  border-left: 4px solid var(--accent);
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin: 0 0 12px 0;
+}
+
+/* ===== カードセクション ===== */
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+/* ===== 検索ボックス周り ===== */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+}
+
+.search-row-btns {
+  justify-content: flex-end;
+}
+
+.search-row-btns .box {
+  flex: 0 0 120px;
+}
+
+.box {
+  display: inline-block;
+  position: relative;
+  flex: 1 1 0;
+}
+
+.full-box {
+  flex: 1 1 100%;
+}
+
+input[type="text"], input[type="number"], select {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+select {
+  cursor: pointer;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15);
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+button {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: var(--accent-dark);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background-color: #757575;
+}
+
+.btn-secondary:hover {
+  background-color: #616161;
+}
+
+/* ===== サジェスト ===== */
+.suggestions {
+  border: 1.5px solid transparent;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 4px;
+  position: absolute;
+  background-color: white;
+  z-index: -1;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.active-border {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+  z-index: 1000;
+}
+
+.suggestions div {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  font-size: 0.9rem;
+}
+
+.suggestions div:hover {
+  background-color: var(--accent-light);
+}
+
+/* ===== テーブル ===== */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  border-radius: 8px;
+}
+
+#measureTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 8px 6px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+th {
+  font-size: 0.95rem;
+  font-weight: 700;
+  background-color: var(--accent);
+  color: #fff;
+}
+
+td {
+  font-size: 0.9rem;
+  background-color: #fff;
+}
+
+tbody tr:hover td {
+  background-color: var(--accent-light);
+}
+
+/* ===== 検証テーブル列幅 ===== */
+#measureTable th:nth-child(1),
+#measureTable td:nth-child(1) { width: 10%; } /* CB */
+#measureTable th:nth-child(2),
+#measureTable td:nth-child(2) { width: 12%; } /* レベル */
+#measureTable th:nth-child(3),
+#measureTable td:nth-child(3) { width: 20%; } /* DS値 */
+#measureTable th:nth-child(4),
+#measureTable td:nth-child(4) { width: 40%; } /* 1確残 */
+#measureTable th:nth-child(5),
+#measureTable td:nth-child(5) { width: 18%; } /* 結果 */
+
+/* ===== チェックボックス ===== */
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+/* ===== 1確残入力 ===== */
+.ichikaku-input {
+  width: 100% !important;
+  height: auto !important;
+  padding: 4px 6px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px !important;
+  text-align: center;
+  font-size: 0.85rem !important;
+}
+
+.ichikaku-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(67, 160, 71, 0.15) !important;
+}
+
+/* ===== ログ表示 ===== */
+#logContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.no-log {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.log-entry {
+  background-color: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+}
+
+.log-line {
+  font-family: 'Noto Sans JP', monospace;
+  padding: 2px 0;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.log-supplement {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #c8e6c9;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.result-ok {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.result-ng {
+  color: #c62828;
+  font-weight: 700;
+}
+
+.log-timestamp {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+/* ===== モーダル ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  padding: 24px;
+  width: 90%;
+  max-width: 420px;
+  z-index: 1;
+}
+
+.modal-content h4 {
+  margin-bottom: 14px;
+}
+
+.modal-content textarea {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  resize: vertical;
+  outline: none;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.modal-content textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 10px;
+}
+
+#cancelRecord {
+  background-color: #757575;
+}
+
+#cancelRecord:hover {
+  background-color: #616161;
+}
+
+/* ===== 戻るリンク ===== */
+.back-link {
+  text-align: center;
+  padding: 20px 0 8px;
+}
+
+.back-link a {
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.back-link a:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* ===== アイコン ===== */
+.title-icon {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+/* ===== レスポンシブ ===== */
+@media screen and (max-width: 500px) {
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  input[type="text"], input[type="number"], select, button {
+    font-size: 14px;
+    width: 100%;
+  }
+}
