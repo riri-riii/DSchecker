@@ -237,7 +237,7 @@ async function renderLog() {
 
     let html = `<div class="log-header">${escapeHtml(header)}</div>`;
 
-    for (const row of entry.データ) {
+    for (const row of (entry.データ || [])) {
       const resultChar = row.結果 ? "○" : "×";
       const resultClass = row.結果 ? "result-ok" : "result-ng";
       const ichikaku = row["1確残"] || "-";
@@ -309,6 +309,14 @@ document.getElementById("recordButton").addEventListener("click", () => {
   const name = document.getElementById("measureAssistName").value.trim();
   if (!name) {
     alert("検証アシスト名を入力してください。");
+    return;
+  }
+  if (!document.getElementById("castSelect").value) {
+    alert("キャストを選択してください。");
+    return;
+  }
+  if (!document.querySelector("#measureTable .cb-check:checked")) {
+    alert("記録する行を少なくとも1つチェックしてください。");
     return;
   }
   document.getElementById("supplementInput").value = "";
@@ -395,6 +403,8 @@ document.getElementById("clearButton").addEventListener("click", () => {
   }
 
   selectedItems = [null, null, null, null, null];
+  document.querySelectorAll("#measureTable .cb-check, #measureTable .result-check")
+    .forEach(cb => { cb.checked = false; });
   updateMeasureTable();
 });
 
