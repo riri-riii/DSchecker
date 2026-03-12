@@ -161,8 +161,8 @@ function renderLog() {
     div.className = "log-entry";
 
     const assistParts = entry.アシスト.filter(a => a);
-    const assistStr = assistParts.length > 0 ? "_" + assistParts.join("_") : "";
-    const header = `${entry.検証アシスト名}[${entry.キャスト}${assistStr}]`;
+    const assistStr = assistParts.length > 0 ? assistParts.join("") : "（アシストなし）";
+    const header = `${entry.検証アシスト名}[${entry.キャスト}_${assistStr}]`;
 
     let html = `<div class="log-header">${escapeHtml(header)}</div>`;
 
@@ -192,6 +192,11 @@ function escapeHtml(str) {
 
 /* ===== 記録ボタン ===== */
 document.getElementById("recordButton").addEventListener("click", () => {
+  const name = document.getElementById("measureAssistName").value.trim();
+  if (!name) {
+    alert("検証アシスト名を入力してください。");
+    return;
+  }
   document.getElementById("supplementInput").value = "";
   document.getElementById("recordModal").classList.remove("hidden");
 });
