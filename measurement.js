@@ -169,8 +169,8 @@ function updateMeasureTable() {
 /* ===== Firebase REST API ===== */
 function getDbUrl() {
   const url = FIREBASE_DB_URL.trim().replace(/\/$/, "");
-  if (!url || url === "YOUR_FIREBASE_DATABASE_URL_HERE") {
-    throw new Error("Firebase URL 未設定: GitHub Actions のワークフローが main ブランチで実行されているか、Secret の FIREBASE_DB_URL が正しく設定されているか確認してください。");
+  if (!url.startsWith("https://")) {
+    throw new Error("Firebase URL が正しく設定されていません。GitHub Actions のワークフローが main ブランチで実行されているか、Secret の FIREBASE_DB_URL を確認してください。");
   }
   return url;
 }
