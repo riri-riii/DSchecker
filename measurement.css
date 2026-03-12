@@ -267,6 +267,27 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+#logContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+#logContainer::-webkit-scrollbar-track {
+  background: var(--accent-light);
+  border-radius: 3px;
+}
+
+#logContainer::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+#logContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dark);
 }
 
 .log-error {
