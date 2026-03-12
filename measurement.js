@@ -3,7 +3,36 @@
 // 例: "https://your-project-id-default-rtdb.firebaseio.com"
 const FIREBASE_DB_URL = "YOUR_FIREBASE_DATABASE_URL_HERE";
 
-/* ===== データ ===== */
+/* ===== 認証 ===== */
+const AUTH_KEY = "ds_checker_auth";
+const AUTH_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30日
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwGGhy1A5MnLe4S0U450LxOY9cJEsNB5J7ePcUh6QwxTuTpNJ5gb1ab1XTX_rk9nv2N/exec";
+
+function isAuthenticated() {
+  try {
+    const data = JSON.parse(localStorage.getItem(AUTH_KEY));
+    return data && data.expiry > Date.now();
+  } catch { return false; }
+}
+
+function saveAuth() {
+  localStorage.setItem(AUTH_KEY, JSON.stringify({ expiry: Date.now() + AUTH_DURATION_MS }));
+}
+
+function updateAuthUI() {
+  const btn = document.getElementById("authButton");
+  btn.textContent = isAuthenticated() ? "認証済み" : "ご協力者様ですか？";
+  btn.classList.toggle("authenticated", isAuthenticated());
+}
+
+function showAuthModal() {
+  document.getElementById("authCodeInput").value = "";
+  document.getElementById("authError").textContent = "";
+  document.getElementById("authModal").classList.remove("hidden");
+  document.getElementById("authCodeInput").focus();
+}
+
+
 let dataA = [], dataB = [], castData = [];
 let selectedItems = [null, null, null, null, null]; // [assist1, assist2, assist3, assist4, soul]
 
@@ -208,7 +237,11 @@ async function renderLog() {
 
     div.innerHTML = html;
 
-    // ゴミ箱ボタン
+    // ゴミ箱ボタン（認証済み時のみ）
+    if (!isAuthenticated()) {
+      container.appendChild(div);
+      continue;
+    }
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "log-delete-btn";
     deleteBtn.title = "削除";
@@ -239,8 +272,24 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
+/* ===== アシスト入力クリア ===== */
+function clearAssistInputs() {
+  for (let i = 1; i <= 5; i++) {
+    const input = document.getElementById(`search${i}`);
+    const sugBox = document.getElementById(`sug${i}`);
+    if (input) input.value = "";
+    if (sugBox) { sugBox.innerHTML = ""; sugBox.classList.remove("active-border"); }
+  }
+  selectedItems = [null, null, null, null, null];
+  updateMeasureTable();
+}
+
 /* ===== 記録ボタン ===== */
 document.getElementById("recordButton").addEventListener("click", () => {
+  if (!isAuthenticated()) {
+    showAuthModal();
+    return;
+  }
   const name = document.getElementById("measureAssistName").value.trim();
   if (!name) {
     alert("検証アシスト名を入力してください。");
@@ -302,6 +351,7 @@ document.getElementById("confirmRecord").addEventListener("click", async () => {
   try {
     await addEntry(entry);
     document.getElementById("recordModal").classList.add("hidden");
+    clearAssistInputs();
     await renderLog();
   } catch (err) {
     alert("保存に失敗しました。Firebase の URL が正しく設定されているか確認してください。");
@@ -337,6 +387,51 @@ document.getElementById("reloadLogButton").addEventListener("click", () => {
   renderLog();
 });
 
+/* ===== 認証モーダル ===== */
+document.getElementById("authButton").addEventListener("click", showAuthModal);
+
+document.getElementById("authModalOverlay").addEventListener("click", () => {
+  document.getElementById("authModal").classList.add("hidden");
+});
+
+document.getElementById("cancelAuth").addEventListener("click", () => {
+  document.getElementById("authModal").classList.add("hidden");
+});
+
+document.getElementById("confirmAuth").addEventListener("click", async () => {
+  const code = document.getElementById("authCodeInput").value.trim();
+  if (!code) return;
+
+  const confirmBtn = document.getElementById("confirmAuth");
+  const errorEl = document.getElementById("authError");
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "確認中…";
+  errorEl.textContent = "";
+
+  try {
+    const res = await fetch(`${GAS_URL}?code=${encodeURIComponent(code)}`);
+    const text = await res.text();
+    if (res.ok && text === "OK") {
+      saveAuth();
+      document.getElementById("authModal").classList.add("hidden");
+      updateAuthUI();
+      await renderLog();
+    } else {
+      errorEl.textContent = "コードが正しくありません。";
+    }
+  } catch (err) {
+    errorEl.textContent = "通信エラーが発生しました。";
+    console.error("認証エラー:", err);
+  } finally {
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "OK";
+  }
+});
+
+document.getElementById("authCodeInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") document.getElementById("confirmAuth").click();
+});
+
 /* ===== 初期化 ===== */
 Promise.all([
   fetch("assist.json").then(r => r.json()),
@@ -349,5 +444,6 @@ Promise.all([
   initTable();
   setupSearchBoxes();
   populateCastSelect();
+  updateAuthUI();
   await renderLog();
 }).catch(err => console.error("データ読み込みエラー:", err));
