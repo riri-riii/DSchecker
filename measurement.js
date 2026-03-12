@@ -167,8 +167,16 @@ function updateMeasureTable() {
 }
 
 /* ===== Firebase REST API ===== */
+function getDbUrl() {
+  const url = FIREBASE_DB_URL.trim().replace(/\/$/, "");
+  if (!url || url === "YOUR_FIREBASE_DATABASE_URL_HERE") {
+    throw new Error("Firebase URL 未設定: GitHub Actions のワークフローが main ブランチで実行されているか、Secret の FIREBASE_DB_URL が正しく設定されているか確認してください。");
+  }
+  return url;
+}
+
 async function getLog() {
-  const res = await fetch(`${FIREBASE_DB_URL}/measurementLog.json`);
+  const res = await fetch(`${getDbUrl()}/measurementLog.json`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   if (!data) return [];
@@ -180,7 +188,7 @@ async function getLog() {
 }
 
 async function addEntry(entry) {
-  const res = await fetch(`${FIREBASE_DB_URL}/measurementLog.json`, {
+  const res = await fetch(`${getDbUrl()}/measurementLog.json`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(entry)
@@ -189,7 +197,7 @@ async function addEntry(entry) {
 }
 
 async function deleteEntry(key) {
-  const res = await fetch(`${FIREBASE_DB_URL}/measurementLog/${key}.json`, {
+  const res = await fetch(`${getDbUrl()}/measurementLog/${key}.json`, {
     method: "DELETE"
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -286,6 +294,9 @@ function clearAssistInputs() {
     if (sugBox) { sugBox.innerHTML = ""; sugBox.classList.remove("active-border"); }
   }
   selectedItems = [null, null, null, null, null];
+  // テーブルのチェックをすべて外す
+  document.querySelectorAll("#measureTable .cb-check, #measureTable .result-check")
+    .forEach(cb => { cb.checked = false; });
   updateMeasureTable();
 }
 
