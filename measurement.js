@@ -20,9 +20,14 @@ function saveAuth() {
 }
 
 function updateAuthUI() {
+  const authed = isAuthenticated();
   const btn = document.getElementById("authButton");
-  btn.textContent = isAuthenticated() ? "認証済み" : "ご協力者様ですか？";
-  btn.classList.toggle("authenticated", isAuthenticated());
+  btn.textContent = authed ? "認証済み" : "ご協力者様ですか？";
+  btn.classList.toggle("authenticated", authed);
+
+  const display = authed ? "" : "none";
+  document.getElementById("sectionInfo").style.display = display;
+  document.getElementById("sectionResult").style.display = display;
 }
 
 function showAuthModal() {

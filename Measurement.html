@@ -10,9 +10,6 @@
   <link rel="stylesheet" href="measurement.css">
 </head>
 <body>
-<!-- 認証ボタン（右上固定） -->
-<button id="authButton" class="btn-auth">ご協力者様ですか？</button>
-
 <!-- 認証モーダル -->
 <div id="authModal" class="modal hidden">
   <div class="modal-overlay" id="authModalOverlay"></div>
@@ -33,10 +30,11 @@
 <h2>
   wlw DS値 検証記録
   <img src="topicon.png" alt="うさみみ" class="title-icon">
+  <button id="authButton" class="btn-auth">ご協力者様ですか？</button>
 </h2>
 
 <!-- ブロック1: 検証情報 -->
-<section class="card">
+<section class="card" id="sectionInfo">
   <h3>検証情報</h3>
   <div class="search-container">
 
@@ -94,7 +92,7 @@
 </section>
 
 <!-- ブロック2: 検証結果テーブル -->
-<section class="card">
+<section class="card" id="sectionResult">
   <h3>検証結果</h3>
   <div class="table-wrapper">
     <table id="measureTable">
