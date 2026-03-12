@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS値検証記録 - wlw</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="measurement.css">
+</head>
+<body>
+<div class="container">
+
+<h2>
+  wlw DS値 検証記録
+  <img src="topicon.png" alt="うさみみ" class="title-icon">
+</h2>
+
+<!-- ブロック1: 検証設定 -->
+<section class="card">
+  <h3>検証設定</h3>
+  <div class="search-container">
+
+    <!-- 1段目: 検証アシスト名 -->
+    <div class="search-row">
+      <div class="box full-box">
+        <input type="text" id="measureAssistName" placeholder="検証アシスト名（直打ち）">
+      </div>
+    </div>
+
+    <!-- 2段目: キャスト選択・アシスト1・アシスト2 -->
+    <div class="search-row">
+      <div class="box">
+        <select id="castSelect">
+          <option value="">キャスト選択</option>
+        </select>
+      </div>
+      <div class="box">
+        <input type="text" id="search1" placeholder="アシスト1">
+        <div class="suggestions" id="sug1"></div>
+      </div>
+      <div class="box">
+        <input type="text" id="search2" placeholder="アシスト2">
+        <div class="suggestions" id="sug2"></div>
+      </div>
+    </div>
+
+    <!-- 3段目: アシスト3・アシスト4・ソウル -->
+    <div class="search-row">
+      <div class="box">
+        <input type="text" id="search3" placeholder="アシスト3">
+        <div class="suggestions" id="sug3"></div>
+      </div>
+      <div class="box">
+        <input type="text" id="search4" placeholder="アシスト4">
+        <div class="suggestions" id="sug4"></div>
+      </div>
+      <div class="box">
+        <input type="text" id="search5" placeholder="ソウル">
+        <div class="suggestions" id="sug5"></div>
+      </div>
+    </div>
+
+    <!-- 4段目: 記録・クリアボタン -->
+    <div class="search-row search-row-btns">
+      <div class="box">
+        <button id="recordButton">記録</button>
+      </div>
+      <div class="box">
+        <button id="clearButton" class="btn-secondary">クリア</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ブロック2: 検証結果テーブル -->
+<section class="card">
+  <h3>検証結果</h3>
+  <div class="table-wrapper">
+    <table id="measureTable">
+      <thead>
+        <tr>
+          <th>CB</th>
+          <th>レベル</th>
+          <th>DS値</th>
+          <th>1確残</th>
+          <th>結果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JavaScriptで8行生成 -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ブロック3: 記録ログ -->
+<section class="card">
+  <h3>記録ログ</h3>
+  <div id="logContainer">
+    <p class="no-log">記録がありません</p>
+  </div>
+</section>
+
+<!-- 記録確認モーダル -->
+<div id="recordModal" class="modal hidden">
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal-content">
+    <h4>現在の検証結果を保存しますか？</h4>
+    <textarea id="supplementInput" placeholder="補足情報（任意）" rows="3"></textarea>
+    <div class="modal-buttons">
+      <button id="confirmRecord">OK</button>
+      <button id="cancelRecord">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<div class="back-link">
+  <a href="index.html">← DS値計算機に戻る</a>
+</div>
+
+</div><!-- /.container -->
+
+<script src="measurement.js"></script>
+</body>
+</html>

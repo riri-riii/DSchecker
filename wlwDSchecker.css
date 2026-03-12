@@ -249,6 +249,28 @@ tbody tr:hover td {
   color: var(--accent-dark) !important;
 }
 
+/* ===== 検証ページリンク ===== */
+.measure-link {
+  text-align: center;
+  padding: 10px 0 4px;
+}
+
+.measure-link a {
+  color: #2e7d32;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: 2px solid #43a047;
+  border-radius: 8px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.measure-link a:hover {
+  background-color: #43a047;
+  color: #fff;
+}
+
 /* ===== フッター ===== */
 footer {
   margin-top: 20px;
