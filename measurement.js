@@ -139,7 +139,10 @@ async function getLog() {
   const data = await res.json();
   if (!data) return [];
   // Firebase は object で返すので配列に変換し、timestamp 昇順でソート
-  return Object.values(data).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  // _firebaseKey を保持して削除時に使用する
+  return Object.entries(data)
+    .map(([key, val]) => ({ _firebaseKey: key, ...val }))
+    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 }
 
 async function addEntry(entry) {
@@ -147,6 +150,13 @@ async function addEntry(entry) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(entry)
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
+async function deleteEntry(key) {
+  const res = await fetch(`${FIREBASE_DB_URL}/measurementLog/${key}.json`, {
+    method: "DELETE"
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
@@ -197,6 +207,26 @@ async function renderLog() {
     }
 
     div.innerHTML = html;
+
+    // ゴミ箱ボタン
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "log-delete-btn";
+    deleteBtn.title = "削除";
+    deleteBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
+    deleteBtn.addEventListener("click", async () => {
+      if (!confirm(`「${header}」\nを削除しますか？`)) return;
+      deleteBtn.disabled = true;
+      try {
+        await deleteEntry(entry._firebaseKey);
+        await renderLog();
+      } catch (err) {
+        alert("削除に失敗しました。");
+        console.error("削除エラー:", err);
+        deleteBtn.disabled = false;
+      }
+    });
+    div.appendChild(deleteBtn);
+
     container.appendChild(div);
   }
 }
