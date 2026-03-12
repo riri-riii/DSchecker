@@ -96,7 +96,7 @@ h3 {
 
 select {
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 1rem;
+  font-size: 0.9rem;
   padding: 10px 12px;
   border: 1.5px solid var(--border);
   border-radius: 8px;
@@ -116,7 +116,7 @@ select:focus {
 
 input {
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 1rem;
+  font-size: 0.9rem;
   padding: 10px 12px;
   border: 1.5px solid var(--border);
   border-radius: 8px;
@@ -139,7 +139,7 @@ input::placeholder {
 
 button {
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   padding: 10px 16px;
   border: none;
@@ -183,7 +183,7 @@ button:active {
   padding: 8px 12px;
   cursor: pointer;
   transition: background-color 0.15s ease;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .suggestions div:hover {
