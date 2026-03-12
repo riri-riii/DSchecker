@@ -464,6 +464,23 @@ h2 {
   min-height: 1.2em;
 }
 
+/* ===== 使用方法モーダル ===== */
+.usage-list {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.8;
+  margin: 0 0 4px 0;
+  padding-left: 1.4em;
+}
+
+.usage-list li {
+  margin-bottom: 10px;
+}
+
+.usage-list li:last-child {
+  margin-bottom: 0;
+}
+
 /* ===== 戻るリンク ===== */
 .back-link {
   text-align: center;

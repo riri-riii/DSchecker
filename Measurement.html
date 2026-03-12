@@ -120,6 +120,22 @@
   </div>
 </section>
 
+<!-- 使用方法モーダル -->
+<div id="usageModal" class="modal hidden">
+  <div class="modal-overlay" id="usageModalOverlay"></div>
+  <div class="modal-content">
+    <h4>使用方法</h4>
+    <ol class="usage-list">
+      <li>検証情報にキャスト、アシスト、ソウルの情報を入力してください。</li>
+      <li>各レベルごとに、兵士をとれたか（自由曲線の場合は8体）をチェックし、取れた場合は検証結果の「結果」列にチェックを入れてください。</li>
+      <li>履歴として残したい行の「記録」列にチェックを入れ、検証情報にある「記録」ボタンを押すと検証結果がログに追加されます。</li>
+    </ol>
+    <div class="modal-buttons">
+      <button id="closeUsage">閉じる</button>
+    </div>
+  </div>
+</div>
+
 <!-- 記録確認モーダル -->
 <div id="recordModal" class="modal hidden">
   <div class="modal-overlay" id="modalOverlay"></div>
