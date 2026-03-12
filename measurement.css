@@ -53,6 +53,19 @@ h3 {
   margin: 0 0 16px 0;
   padding-left: 10px;
   border-left: 4px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-reload {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  width: auto;
+  height: auto;
+  background-color: var(--accent);
+  border-radius: 6px;
 }
 
 h4 {
@@ -253,6 +266,10 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.log-error {
+  color: #c62828 !important;
 }
 
 .no-log {

@@ -1,3 +1,8 @@
+/* ===== Firebase設定 ===== */
+// Firebase Realtime Database の URL を入力してください
+// 例: "https://your-project-id-default-rtdb.firebaseio.com"
+const FIREBASE_DB_URL = "YOUR_FIREBASE_DATABASE_URL_HERE";
+
 /* ===== データ ===== */
 let dataA = [], dataB = [], castData = [];
 let selectedItems = [null, null, null, null, null]; // [assist1, assist2, assist3, assist4, soul]
@@ -113,7 +118,6 @@ function updateMeasureTable() {
 
     rows[i].querySelector(".ds-cell").textContent = total.toFixed(2);
 
-    // 1確残: キャストが選択されていれば自動計算（Lv1・Lv8は対象外）
     const ichikakuCell = rows[i].querySelector(".ichikaku-cell");
     const required = cast ? parseFloat(cast[level]) : NaN;
 
@@ -128,23 +132,38 @@ function updateMeasureTable() {
   }
 }
 
-/* ===== ローカルストレージ ===== */
-function getLog() {
-  try {
-    return JSON.parse(localStorage.getItem("measurementLog") || "[]");
-  } catch {
-    return [];
-  }
+/* ===== Firebase REST API ===== */
+async function getLog() {
+  const res = await fetch(`${FIREBASE_DB_URL}/measurementLog.json`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  if (!data) return [];
+  // Firebase は object で返すので配列に変換し、timestamp 昇順でソート
+  return Object.values(data).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 }
 
-function saveLog(log) {
-  localStorage.setItem("measurementLog", JSON.stringify(log));
+async function addEntry(entry) {
+  const res = await fetch(`${FIREBASE_DB_URL}/measurementLog.json`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entry)
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
 
 /* ===== ログ表示 ===== */
-function renderLog() {
-  const log = getLog();
+async function renderLog() {
   const container = document.getElementById("logContainer");
+  container.innerHTML = '<p class="no-log">読み込み中…</p>';
+
+  let log;
+  try {
+    log = await getLog();
+  } catch (err) {
+    container.innerHTML = '<p class="no-log log-error">ログの読み込みに失敗しました。<br>Firebase の URL が正しく設定されているか確認してください。</p>';
+    console.error("ログ読み込みエラー:", err);
+    return;
+  }
 
   if (log.length === 0) {
     container.innerHTML = '<p class="no-log">記録がありません</p>';
@@ -209,10 +228,9 @@ document.getElementById("modalOverlay").addEventListener("click", () => {
   document.getElementById("recordModal").classList.add("hidden");
 });
 
-document.getElementById("confirmRecord").addEventListener("click", () => {
+document.getElementById("confirmRecord").addEventListener("click", async () => {
   const supplement = document.getElementById("supplementInput").value.trim();
 
-  // CBがオンになっている行のデータを収集
   const tbody = document.querySelector("#measureTable tbody");
   const rows = tbody.querySelectorAll("tr");
   const data = [];
@@ -234,7 +252,7 @@ document.getElementById("confirmRecord").addEventListener("click", () => {
     });
   }
 
-  const measureAssistName = document.getElementById("measureAssistName").value.trim() || "（名称未設定）";
+  const measureAssistName = document.getElementById("measureAssistName").value.trim();
   const castName = document.getElementById("castSelect").value || "（未選択）";
   const assistNames = selectedItems.map(item => item ? item.アシスト名 : null);
 
@@ -247,22 +265,29 @@ document.getElementById("confirmRecord").addEventListener("click", () => {
     "補足": supplement
   };
 
-  const log = getLog();
-  log.push(entry);
-  saveLog(log);
+  const confirmBtn = document.getElementById("confirmRecord");
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "保存中…";
 
-  document.getElementById("recordModal").classList.add("hidden");
-  renderLog();
+  try {
+    await addEntry(entry);
+    document.getElementById("recordModal").classList.add("hidden");
+    await renderLog();
+  } catch (err) {
+    alert("保存に失敗しました。Firebase の URL が正しく設定されているか確認してください。");
+    console.error("保存エラー:", err);
+  } finally {
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "OK";
+  }
 });
 
 /* ===== クリアボタン ===== */
 document.getElementById("clearButton").addEventListener("click", () => {
   if (!confirm("アシストとソウルの入力情報をクリアしますか？")) return;
 
-  // キャスト選択をリセット
   document.getElementById("castSelect").value = "";
 
-  // アシスト1〜4・ソウルをリセット
   for (let i = 1; i <= 5; i++) {
     const input = document.getElementById(`search${i}`);
     const sugBox = document.getElementById(`sug${i}`);
@@ -277,17 +302,22 @@ document.getElementById("clearButton").addEventListener("click", () => {
   updateMeasureTable();
 });
 
+/* ===== ログ再読み込みボタン ===== */
+document.getElementById("reloadLogButton").addEventListener("click", () => {
+  renderLog();
+});
+
 /* ===== 初期化 ===== */
 Promise.all([
   fetch("assist.json").then(r => r.json()),
   fetch("soul.json").then(r => r.json()),
   fetch("cast.json").then(r => r.json())
-]).then(([aData, bData, cData]) => {
+]).then(async ([aData, bData, cData]) => {
   dataA = aData;
   dataB = bData;
   castData = cData;
   initTable();
   setupSearchBoxes();
   populateCastSelect();
-  renderLog();
+  await renderLog();
 }).catch(err => console.error("データ読み込みエラー:", err));
