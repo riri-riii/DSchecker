@@ -237,7 +237,7 @@ async function renderLog() {
 
     let html = `<div class="log-header">${escapeHtml(header)}</div>`;
 
-    for (const row of entry.データ) {
+    for (const row of (entry.データ || [])) {
       const resultChar = row.結果 ? "○" : "×";
       const resultClass = row.結果 ? "result-ok" : "result-ng";
       const ichikaku = row["1確残"] || "-";
