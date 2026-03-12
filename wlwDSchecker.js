@@ -1,26 +1,31 @@
+function clearSugBox(sugBox) {
+  sugBox.innerHTML = "";
+  sugBox.classList.remove("active-border");
+}
+
+function setJudgeCell(cell, actual, required) {
+  const diff = actual - required;
+  cell.innerText = (diff >= 0 ? "+" : "") + diff.toFixed(2);
+  cell.style.color = diff >= 0 ? "green" : "red";
+}
+
 function setupSearchBoxes() {
-  config.forEach(cfg => {
+  config.forEach((cfg, index) => {
     const input = document.getElementById(cfg.search);
     const sugBox = document.getElementById(cfg.sug);
 
     input.addEventListener("input", () => {
       const keyword = input.value.toLowerCase();
-      sugBox.innerHTML = "";
+      clearSugBox(sugBox);
 
       if (!keyword) {
-        sugBox.classList.remove("active-border");
-
-        // 検索ボックスが空白の場合、resultTableの該当行をクリア
-        const index = config.findIndex(c => c.search === cfg.search);
-        if (index !== -1) {
-          const tableBody = document.getElementById("resultTable").querySelector("tbody");
-          const rows = tableBody.querySelectorAll("tr");
-          rows[index].cells[0].innerText = placeholderNames[index];
-          rows[index].cells[0].classList.add("placeholder-text");
-          rows[index].cells[1].innerText = "";
-          rows[index].cells[2].innerText = "";
-          rows[index].cells[3].innerText = "";
-        }
+        const tableBody = document.getElementById("resultTable").querySelector("tbody");
+        const rows = tableBody.querySelectorAll("tr");
+        rows[index].cells[0].innerText = placeholderNames[index];
+        rows[index].cells[0].classList.add("placeholder-text");
+        rows[index].cells[1].innerText = "";
+        rows[index].cells[2].innerText = "";
+        rows[index].cells[3].innerText = "";
         updateSummaryTable();
         return;
       }
@@ -38,8 +43,7 @@ function setupSearchBoxes() {
         div.className = "suggestion-item";
         div.onclick = () => {
           input.value = item.アシスト名;
-          sugBox.innerHTML = "";
-          sugBox.classList.remove("active-border");
+          clearSugBox(sugBox);
           addToTable(item);
         };
         sugBox.appendChild(div);
@@ -47,10 +51,7 @@ function setupSearchBoxes() {
     });
 
     input.addEventListener("blur", () => {
-      setTimeout(() => {
-        sugBox.innerHTML = "";
-        sugBox.classList.remove("active-border");
-      }, 200);
+      setTimeout(() => clearSugBox(sugBox), 200);
     });
 
     input.addEventListener("focus", () => {
@@ -93,19 +94,15 @@ function updateSummaryTable() {
     }
   }
 
-  // サマリーテーブルを更新
+  // ds1〜ds8 の要素をキャッシュしつつ更新
+  const dsEls = {};
   for (let i = 1; i <= 8; i++) {
-    document.getElementById("ds" + i).innerText = "0";
-  }
-
-  for (let i = 1; i <= 8; i++) {
+    dsEls[i] = document.getElementById("ds" + i);
     let total = 0;
     for (let j = 0; j < levels.length; j++) {
-      if (levels[j] <= i) {
-        total += dsValues[j];
-      }
+      if (levels[j] <= i) total += dsValues[j];
     }
-    document.getElementById("ds" + i).innerText = total.toFixed(2);
+    dsEls[i].innerText = total.toFixed(2);
   }
 
   const judgeRow = document.getElementById("judgeRow");
@@ -127,32 +124,12 @@ function updateSummaryTable() {
 
   // Lv2-4 (judgeRow: cells[2]=Lv2, cells[3]=Lv3, cells[4]=Lv4)
   for (let i = 2; i <= 4; i++) {
-    const required = parseFloat(cast[i]);
-    const actual = parseFloat(document.getElementById("ds" + i).innerText);
-    const diff = actual - required;
-    const cell = judgeRow.cells[i];
-    if (actual >= required) {
-      cell.innerText = `+${diff.toFixed(2)}`;
-      cell.style.color = "green";
-    } else {
-      cell.innerText = `${diff.toFixed(2)}`;
-      cell.style.color = "red";
-    }
+    setJudgeCell(judgeRow.cells[i], parseFloat(dsEls[i].innerText), parseFloat(cast[i]));
   }
 
   // Lv5-7 (judgeRow2: cells[1]=Lv5, cells[2]=Lv6, cells[3]=Lv7)
   for (let i = 5; i <= 7; i++) {
-    const required = parseFloat(cast[i]);
-    const actual = parseFloat(document.getElementById("ds" + i).innerText);
-    const diff = actual - required;
-    const cell = judgeRow2.cells[i - 4];
-    if (actual >= required) {
-      cell.innerText = `+${diff.toFixed(2)}`;
-      cell.style.color = "green";
-    } else {
-      cell.innerText = `${diff.toFixed(2)}`;
-      cell.style.color = "red";
-    }
+    setJudgeCell(judgeRow2.cells[i - 4], parseFloat(dsEls[i].innerText), parseFloat(cast[i]));
   }
 
   judgeRow.cells[1].innerText = "-";   // Lv1
@@ -178,11 +155,11 @@ const placeholderNames = ["アシスト1", "アシスト2", "アシスト3", "�
 let dataA = [], dataB = [], castData = [];
 
 const config = [
-  { search: "search1", sug: "sug1", det: "det1", source: "a", filter: () => true },
-  { search: "search2", sug: "sug2", det: "det2", source: "a", filter: () => true },
-  { search: "search3", sug: "sug3", det: "det3", source: "a", filter: () => true },
-  { search: "search4", sug: "sug4", det: "det4", source: "a", filter: item => item.レベル >= 6 },
-  { search: "search5", sug: "sug5", det: "det5", source: "b", filter: () => true }
+  { search: "search1", sug: "sug1", source: "a", filter: () => true },
+  { search: "search2", sug: "sug2", source: "a", filter: () => true },
+  { search: "search3", sug: "sug3", source: "a", filter: () => true },
+  { search: "search4", sug: "sug4", source: "a", filter: item => item.レベル >= 6 },
+  { search: "search5", sug: "sug5", source: "b", filter: () => true }
 ];
 
 Promise.all([
@@ -197,8 +174,7 @@ Promise.all([
   populateCastSelect();
 }).catch(err => console.error("データ読み込みエラー:", err));
 
-
-  // 各検索ボックスの内容をクリア
+// 各検索ボックスの内容をクリア
 document.getElementById("clearButton").addEventListener("click", () => {
   if (!confirm("選択内容をリセットしますか？")) return;
   for (let i = 1; i <= 5; i++) {
