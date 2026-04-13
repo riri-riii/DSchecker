@@ -285,14 +285,18 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-/* ===== アシスト入力クリア ===== */
-function clearAssistInputs() {
+function clearSearchInputs() {
   for (let i = 1; i <= 5; i++) {
     const input = document.getElementById(`search${i}`);
     const sugBox = document.getElementById(`sug${i}`);
     if (input) input.value = "";
     if (sugBox) { sugBox.innerHTML = ""; sugBox.classList.remove("active-border"); }
   }
+}
+
+/* ===== アシスト入力クリア ===== */
+function clearAssistInputs() {
+  clearSearchInputs();
   selectedItems = [null, null, null, null, null];
   // テーブルのチェックをすべて外す
   document.querySelectorAll("#measureTable .cb-check, #measureTable .result-check")
@@ -391,16 +395,7 @@ document.getElementById("clearButton").addEventListener("click", () => {
   if (!confirm("アシストとソウルの入力情報をクリアしますか？")) return;
 
   document.getElementById("castSelect").value = "";
-
-  for (let i = 1; i <= 5; i++) {
-    const input = document.getElementById(`search${i}`);
-    const sugBox = document.getElementById(`sug${i}`);
-    if (input) input.value = "";
-    if (sugBox) {
-      sugBox.innerHTML = "";
-      sugBox.classList.remove("active-border");
-    }
-  }
+  clearSearchInputs();
 
   selectedItems = [null, null, null, null, null];
   document.querySelectorAll("#measureTable .cb-check, #measureTable .result-check")
