@@ -181,7 +181,7 @@ document.getElementById("clearButton").addEventListener("click", () => {
     const input = document.getElementById(`search${i}`);
     const sugBox = document.getElementById(`sug${i}`);
     if (input) input.value = "";
-    if (sugBox) sugBox.innerHTML = "";
+    if (sugBox) clearSugBox(sugBox);
   }
   const rows = document.getElementById("resultTable").querySelectorAll("tbody tr");
   rows.forEach((row, rowIndex) => {
