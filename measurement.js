@@ -6,7 +6,8 @@ const FIREBASE_DB_URL = "YOUR_FIREBASE_DATABASE_URL_HERE";
 /* ===== 認証 ===== */
 const AUTH_KEY = "ds_checker_auth";
 const AUTH_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30日
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwGGhy1A5MnLe4S0U450LxOY9cJEsNB5J7ePcUh6QwxTuTpNJ5gb1ab1XTX_rk9nv2N/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwF9GcABLfDuflryBd_OZzoowBh39BqqAlYZ7Im20j1hCKCm2kVpMP4zRoCP_RnkehpPw/exec";
+const AUTH_REQUEST_TIMEOUT_MS = 10000;
 
 function isAuthenticated() {
   try {
@@ -35,6 +36,45 @@ function showAuthModal() {
   document.getElementById("authError").textContent = "";
   document.getElementById("authModal").classList.remove("hidden");
   document.getElementById("authCodeInput").focus();
+}
+
+async function verifyAuthCode(code) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), AUTH_REQUEST_TIMEOUT_MS);
+
+  try {
+    // 基本は POST(JSON) で送る。GAS 側は doPost(e) で受け取る想定。
+    const postRes = await fetch(GAS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+      signal: controller.signal
+    });
+    if (postRes.ok) {
+      const postText = (await postRes.text()).trim();
+      if (isAuthSuccessResponse(postText)) return true;
+    }
+
+    // 互換用フォールバック（既存の doGet(e) 形式にも対応）
+    const getRes = await fetch(`${GAS_URL}?code=${encodeURIComponent(code)}`, {
+      signal: controller.signal
+    });
+    const getText = (await getRes.text()).trim();
+    return getRes.ok && isAuthSuccessResponse(getText);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function isAuthSuccessResponse(rawText) {
+  if (rawText === "OK") return true;
+  try {
+    const parsed = JSON.parse(rawText);
+    // 想定レスポンス例: {"ok":true} / {"status":"OK"}
+    return parsed?.ok === true || parsed?.status === "OK";
+  } catch {
+    return false;
+  }
 }
 
 
@@ -285,14 +325,18 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-/* ===== アシスト入力クリア ===== */
-function clearAssistInputs() {
+function clearSearchInputs() {
   for (let i = 1; i <= 5; i++) {
     const input = document.getElementById(`search${i}`);
     const sugBox = document.getElementById(`sug${i}`);
     if (input) input.value = "";
     if (sugBox) { sugBox.innerHTML = ""; sugBox.classList.remove("active-border"); }
   }
+}
+
+/* ===== アシスト入力クリア ===== */
+function clearAssistInputs() {
+  clearSearchInputs();
   selectedItems = [null, null, null, null, null];
   // テーブルのチェックをすべて外す
   document.querySelectorAll("#measureTable .cb-check, #measureTable .result-check")
@@ -391,16 +435,7 @@ document.getElementById("clearButton").addEventListener("click", () => {
   if (!confirm("アシストとソウルの入力情報をクリアしますか？")) return;
 
   document.getElementById("castSelect").value = "";
-
-  for (let i = 1; i <= 5; i++) {
-    const input = document.getElementById(`search${i}`);
-    const sugBox = document.getElementById(`sug${i}`);
-    if (input) input.value = "";
-    if (sugBox) {
-      sugBox.innerHTML = "";
-      sugBox.classList.remove("active-border");
-    }
-  }
+  clearSearchInputs();
 
   selectedItems = [null, null, null, null, null];
   document.querySelectorAll("#measureTable .cb-check, #measureTable .result-check")
@@ -453,9 +488,8 @@ document.getElementById("confirmAuth").addEventListener("click", async () => {
   errorEl.textContent = "";
 
   try {
-    const res = await fetch(`${GAS_URL}?code=${encodeURIComponent(code)}`);
-    const text = await res.text();
-    if (res.ok && text === "OK") {
+    const isValid = await verifyAuthCode(code);
+    if (isValid) {
       saveAuth();
       document.getElementById("authModal").classList.add("hidden");
       updateAuthUI();
