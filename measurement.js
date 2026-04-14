@@ -6,7 +6,7 @@ const FIREBASE_DB_URL = "YOUR_FIREBASE_DATABASE_URL_HERE";
 /* ===== 認証 ===== */
 const AUTH_KEY = "ds_checker_auth";
 const AUTH_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30日
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwGGhy1A5MnLe4S0U450LxOY9cJEsNB5J7ePcUh6QwxTuTpNJ5gb1ab1XTX_rk9nv2N/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwF9GcABLfDuflryBd_OZzoowBh39BqqAlYZ7Im20j1hCKCm2kVpMP4zRoCP_RnkehpPw/exec";
 const AUTH_REQUEST_TIMEOUT_MS = 10000;
 
 function isAuthenticated() {
