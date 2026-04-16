@@ -43,11 +43,14 @@ async function verifyAuthCode(code) {
   const timer = setTimeout(() => controller.abort(), AUTH_REQUEST_TIMEOUT_MS);
 
   try {
-    // 基本は POST(JSON) で送る。GAS 側は doPost(e) で受け取る想定。
+    // form-urlencoded POST はブラウザが CORS プリフライト(OPTIONS)を送らない
+    // "シンプルリクエスト" のため、GAS がプリフライトに対応していなくても動作する。
+    // Content-Type: application/json は非シンプルリクエストとなりプリフライトが
+    // 必要になるため使用しない。
     const postRes = await fetch(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code }),
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `code=${encodeURIComponent(code)}`,
       signal: controller.signal
     });
     if (postRes.ok) {
