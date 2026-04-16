@@ -7,7 +7,7 @@ const FIREBASE_DB_URL = "YOUR_FIREBASE_DATABASE_URL_HERE";
 const AUTH_KEY = "ds_checker_auth";
 const AUTH_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30日
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwF9GcABLfDuflryBd_OZzoowBh39BqqAlYZ7Im20j1hCKCm2kVpMP4zRoCP_RnkehpPw/exec";
-const AUTH_REQUEST_TIMEOUT_MS = 10000;
+const AUTH_REQUEST_TIMEOUT_MS = 20000; // GAS コールドスタートを考慮して 20 秒
 
 function isAuthenticated() {
   try {
@@ -43,27 +43,15 @@ async function verifyAuthCode(code) {
   const timer = setTimeout(() => controller.abort(), AUTH_REQUEST_TIMEOUT_MS);
 
   try {
-    // form-urlencoded POST はブラウザが CORS プリフライト(OPTIONS)を送らない
-    // "シンプルリクエスト" のため、GAS がプリフライトに対応していなくても動作する。
-    // Content-Type: application/json は非シンプルリクエストとなりプリフライトが
-    // 必要になるため使用しない。
-    const postRes = await fetch(GAS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `code=${encodeURIComponent(code)}`,
+    // GAS はリダイレクト（script.google.com → script.googleusercontent.com）を経由するため
+    // POST では CORS ヘッダーが失われハングすることがある。
+    // GET はシンプルリクエストかつリダイレクト後も CORS ヘッダーが維持されるため
+    // クロスオリジン呼び出しに最も信頼性が高い。
+    const res = await fetch(`${GAS_URL}?code=${encodeURIComponent(code)}`, {
       signal: controller.signal
     });
-    if (postRes.ok) {
-      const postText = (await postRes.text()).trim();
-      if (isAuthSuccessResponse(postText)) return true;
-    }
-
-    // 互換用フォールバック（既存の doGet(e) 形式にも対応）
-    const getRes = await fetch(`${GAS_URL}?code=${encodeURIComponent(code)}`, {
-      signal: controller.signal
-    });
-    const getText = (await getRes.text()).trim();
-    return getRes.ok && isAuthSuccessResponse(getText);
+    const text = (await res.text()).trim();
+    return res.ok && isAuthSuccessResponse(text);
   } finally {
     clearTimeout(timer);
   }
