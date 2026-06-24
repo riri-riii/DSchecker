@@ -9,6 +9,28 @@ const AUTH_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30日
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwF9GcABLfDuflryBd_OZzoowBh39BqqAlYZ7Im20j1hCKCm2kVpMP4zRoCP_RnkehpPw/exec";
 const AUTH_REQUEST_TIMEOUT_MS = 20000; // GAS コールドスタートを考慮して 20 秒
 
+const DATA_BASE_URL = new URL(".", document.currentScript.src);
+
+async function fetchJsonData(fileName) {
+  const url = new URL(fileName, DATA_BASE_URL);
+  let res;
+  try {
+    res = await fetch(url);
+  } catch (err) {
+    throw new Error(`${fileName} の取得に失敗しました: ${err.message || err}`);
+  }
+
+  if (!res.ok) {
+    throw new Error(`${fileName} の取得に失敗しました: HTTP ${res.status} ${res.statusText}`);
+  }
+
+  try {
+    return await res.json();
+  } catch (err) {
+    throw new Error(`${fileName} のJSON解析に失敗しました: ${err.message || err}`);
+  }
+}
+
 function isAuthenticated() {
   try {
     const data = JSON.parse(localStorage.getItem(AUTH_KEY));
@@ -503,9 +525,9 @@ document.getElementById("authCodeInput").addEventListener("keydown", (e) => {
 
 /* ===== 初期化 ===== */
 Promise.all([
-  fetch("assist.json").then(r => r.json()),
-  fetch("soul.json").then(r => r.json()),
-  fetch("cast.json").then(r => r.json())
+  fetchJsonData("assist.json"),
+  fetchJsonData("soul.json"),
+  fetchJsonData("cast.json")
 ]).then(async ([aData, bData, cData]) => {
   dataA = aData;
   dataB = bData;
