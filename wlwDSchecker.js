@@ -1,3 +1,25 @@
+const DATA_BASE_URL = new URL(".", document.currentScript.src);
+
+async function fetchJsonData(fileName) {
+  const url = new URL(fileName, DATA_BASE_URL);
+  let res;
+  try {
+    res = await fetch(url);
+  } catch (err) {
+    throw new Error(`${fileName} の取得に失敗しました: ${err.message || err}`);
+  }
+
+  if (!res.ok) {
+    throw new Error(`${fileName} の取得に失敗しました: HTTP ${res.status} ${res.statusText}`);
+  }
+
+  try {
+    return await res.json();
+  } catch (err) {
+    throw new Error(`${fileName} のJSON解析に失敗しました: ${err.message || err}`);
+  }
+}
+
 function clearSugBox(sugBox) {
   sugBox.innerHTML = "";
   sugBox.classList.remove("active-border");
@@ -163,9 +185,9 @@ const config = [
 ];
 
 Promise.all([
-  fetch("assist.json").then(r => r.json()),
-  fetch("soul.json").then(r => r.json()),
-  fetch("cast.json").then(r => r.json())
+  fetchJsonData("assist.json"),
+  fetchJsonData("soul.json"),
+  fetchJsonData("cast.json")
 ]).then(([aData, bData, cData]) => {
   dataA = aData;
   dataB = bData;
