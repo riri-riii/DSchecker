@@ -284,13 +284,14 @@ async function renderLog() {
     const div = document.createElement("div");
     div.className = "log-entry";
 
-    const assistParts = (entry.アシスト || []).filter(a => a);
+    // Firebaseは空スロットの多い配列を数値キーのオブジェクトとして返す場合がある
+    const assistParts = Object.values(entry.アシスト || {}).filter(a => a);
     const assistStr = assistParts.length > 0 ? assistParts.join("") : "（アシストなし）";
     const header = `${entry.検証アシスト名}[${entry.キャスト}_${assistStr}]`;
 
     let html = `<div class="log-header">${escapeHtml(header)}</div>`;
 
-    for (const row of (entry.データ || [])) {
+    for (const row of Object.values(entry.データ || {}).filter(row => row)) {
       const resultChar = row.結果 ? "○" : "×";
       const resultClass = row.結果 ? "result-ok" : "result-ng";
       const ichikaku = row["1確残"] || "-";
